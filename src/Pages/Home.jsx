@@ -9,7 +9,7 @@ export default function Home() {
   const [items,setItem]= useState(["item1","item2","item3","item4"])
   return (
     <div>
-        <Navbar />
+        <Navbar page={"/"} />
         <section>
           <Carousel />  
         </section>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Navbar() {
+export default function Navbar({page}) {
   const [menu, setMenu] = useState(false);
   return (
     <nav className="sticky bg-white w-full z-50 top-0 start-0 border-b shadow-lg ">
@@ -19,19 +19,19 @@ export default function Navbar() {
             <div className="hidden  xl:flex xl:items-center">
                 <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-default">
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-3 lg:space-x-9 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-white">
-                    <li>
+                    <li className={page == "/" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                         <Link to="/" className= 'block py-2 px-3 text-black rounded'>Home</Link>
                     </li>
-                    <li>
+                    <li className={page == "/blog" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                         <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>Blog</Link>
                     </li>
-                    <li>
+                    <li className={page == "/scholarship" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                         <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Scholarship</Link>
                     </li>
-                    <li>
+                    <li className={page == "/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                         <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
                     </li>
-                    <li>
+                    <li className={page == "/contact" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                         <Link to="/contact" className= 'block py-2 px-3 text-black rounded'>Contact</Link>
                     </li>
                     </ul>

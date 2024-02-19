@@ -7,7 +7,7 @@ import SmallCard from '../Components/Card/SmallCard'
 export default function Blog() {
   return (
     <div>
-      <Navbar />
+      <Navbar page={"/blog"} />
       <section className="hot flex flex-col justify-center items-center  lg:flex-row lg:justify-center p-3 ">
         <Card />
         <Card />

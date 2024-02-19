@@ -6,7 +6,7 @@ import CourseCard from '../Components/Card/CourseCard'
 export default function Course() {
   return (
     <div>
-        <Navbar />
+        <Navbar page={"/course"} />
         <section className='flex justify-center items-center my-3'>
           <div className=" relative flex items-center">
               <input name="keyword" type="text" className="border-none rounded-lg p-3 border-gray-700 w-96 focus:border-none focus:scale-105 transition-all focus:ring-0 shadow-lg" placeholder="Search course..." />

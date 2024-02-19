@@ -6,7 +6,7 @@ import Footer from '../Components/Frontend-Footer/Footer'
 export default function Scholarship() {
   return (
     <div>
-        <Navbar />
+        <Navbar page={"/scholarship"} />
         <div className='flex p-3'>
             <div className='w-full '>
             <section>

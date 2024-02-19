@@ -5,7 +5,7 @@ import Footer from '../Components/Frontend-Footer/Footer'
 export default function Contact() {
   return (
     <div>
-      <Navbar />
+      <Navbar page={"/contact"} />
         <section>
           <div className=" flex  mb-6 justify-center">
           <div
