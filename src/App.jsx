@@ -8,6 +8,7 @@ import Signin from './Pages/Signin'
 import Signup from './Pages/Signup'
 import PostDetail from './Pages/PostDetail'
 import CourseDetail from './Pages/CourseDetail'
+import Dashboard from './Pages/Dashboard/Dashboard'
 
 function App() {
  
@@ -23,6 +24,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/postDetail" element={<PostDetail />} />
         <Route path="/courseDetail" element={<CourseDetail />} />
+        <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   )
