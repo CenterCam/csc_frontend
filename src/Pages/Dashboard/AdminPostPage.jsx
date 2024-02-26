@@ -2,24 +2,25 @@ import React from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { Link } from 'react-router-dom'
-import { toast } from 'sonner'
+import { toast } from 'sonner';
 
-export default function AdminUser() {
-  const handleDelete = (e)=>{
-    e.preventDefault();
-    const shouldContinue = window.confirm("Are you sure you want to delete?");
-    if (shouldContinue) {
-        toast.success("User have been deleted")
-    } 
-  }
-  const id = "asfsad";
+export default function AdminPostPage() {
+    const id = "asfsd";
+    const handleDelete = (e)=>{
+        e.preventDefault();
+        const shouldContinue = window.confirm("Are you sure you want to delete?");
+        if (shouldContinue) {
+            toast.success("User have been deleted")
+        } 
+      }
+
   return (
     <div>
-        <NavbarDashboard page={"/dashboard/user"} />
+        <NavbarDashboard page={"/dashboard/post"} />
         <div className='w-full flex flex-col justify-center items-center'>
             <div className='flex justify-between gap-6 my-3 p-3 lg:w-1/2'>
                 <p className='font-bold text-lg'>User List</p>
-                <Link to={"/dashboard/user/create"} className='text-white font-medium text-sm bg-green-500 py-1 px-4 rounded-full'>Create User</Link>
+                <Link to={"/dashboard/post/create"} className='text-white font-medium text-sm bg-green-500 py-1 px-4 rounded-full'>Create User</Link>
             </div>
             <div className='lg:w-1/2 p-3 w-full'>
                 <div className="w-full overflow-scroll scrollable">
@@ -30,16 +31,22 @@ export default function AdminUser() {
                                     NO.
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Name
+                                    Title
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Gmail
+                                    Country
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Role
+                                    Status
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Active
+                                    Program
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Category
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Deadline
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Action
@@ -47,24 +54,30 @@ export default function AdminUser() {
                             </tr>
                         </thead>
                         <tbody className='text-black font-medium'>
-                            <tr className="odd:bg-white even:bg-gray-50 border-b">
+                            <tr className="odd:bg-white even:bg-gray-50 border-b ">
                                 <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
                                     1
                                 </th>
-                                <td className="px-6 py-4">
-                                Hong Nnureach
+                                <td className="px-6 py-4 truncate w-40 line-clamp-1">
+                                Scholarship to Cambodia
                                 </td>
                                 <td className="px-6 py-4">
-                                Nureach@gmail.com
+                                Cambodia
                                 </td>
                                 <td className="px-6 py-4">
-                                Admin
+                                New
                                 </td>
                                 <td className="px-6 py-4">
-                                Active
+                                Bachelor/Master/Phd
+                                </td>
+                                <td className="px-6 py-4">
+                                Scholarship
+                                </td>
+                                <td className="px-6 py-4">
+                                15/02/2003
                                 </td>
                                 <td className="px-6 py-4 flex items-center space-x-3">
-                                <Link to={`/dashboard/user/edit/${id}`} >
+                                <Link to={`/dashboard/post/update/${id}`} >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M9 15v-4.25l9.175-9.175q.3-.3.675-.45t.75-.15q.4 0 .763.15t.662.45L22.425 3q.275.3.425.663T23 4.4q0 .375-.138.738t-.437.662L13.25 15H9Zm10.6-9.2l1.425-1.4l-1.4-1.4L18.2 4.4l1.4 1.4ZM5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h8.925L7 9.925V17h7.05L21 10.05V19q0 .825-.588 1.413T19 21H5Z"/></svg>            
                                 </Link>
                                 <button onClick={handleDelete} href="{{route('user.delete.action',$user)}}">

@@ -13,6 +13,9 @@ import AdminUser from './Pages/Dashboard/AdminUser'
 import UserCreateForm from './Pages/Dashboard/UserCreateForm'
 import { Toaster } from 'sonner'
 import UserEditForm from './Pages/Dashboard/UserEditForm'
+import AdminPostPage from './Pages/Dashboard/AdminPostPage'
+import PostCreateForm from './Pages/Dashboard/PostCreateForm'
+import PostUpdateForm from './Pages/Dashboard/PostUpdateForm'
 
 function App() {
  
@@ -34,6 +37,9 @@ function App() {
         <Route path='/dashboard/user' element={<AdminUser />} />
         <Route path='/dashboard/user/create' element={<UserCreateForm />} />
         <Route path='/dashboard/user/edit/:id' element={<UserEditForm />} />
+        <Route path='/dashboard/post' element={<AdminPostPage />} />
+        <Route path='/dashboard/post/create' element={<PostCreateForm />} />
+        <Route path='/dashboard/post/update/:id' element={<PostUpdateForm />} />
       </Routes>
     </BrowserRouter>
     </>
