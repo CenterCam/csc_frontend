@@ -22,8 +22,8 @@ export default function NavbarDashboard({page}) {
                 <li className={page == "/dashboard" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard" className= 'block py-2 px-3 text-black rounded'>Dashboard</Link>
                 </li>
-                <li className={page == "/blog" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                    <Link to="/dashboard" className= 'block py-2 px-3 text-black rounded'>User</Link>
+                <li className={page == "/admin/user" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                    <Link to="/dashboard/user" className= 'block py-2 px-3 text-black rounded'>User</Link>
                 </li>
                 <li className={page == "/scholarship" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard" className= 'block py-2 px-3 text-black rounded'>Post</Link>

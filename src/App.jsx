@@ -9,10 +9,16 @@ import Signup from './Pages/Signup'
 import PostDetail from './Pages/PostDetail'
 import CourseDetail from './Pages/CourseDetail'
 import Dashboard from './Pages/Dashboard/Dashboard'
+import AdminUser from './Pages/Dashboard/AdminUser'
+import UserCreateForm from './Pages/Dashboard/UserCreateForm'
+import { Toaster } from 'sonner'
+import UserEditForm from './Pages/Dashboard/UserEditForm'
 
 function App() {
  
   return (
+    <>
+     <Toaster position='bottom-right' expand={false} richColors  />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -25,8 +31,12 @@ function App() {
         <Route path="/postDetail" element={<PostDetail />} />
         <Route path="/courseDetail" element={<CourseDetail />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard/user' element={<AdminUser />} />
+        <Route path='/dashboard/user/create' element={<UserCreateForm />} />
+        <Route path='/dashboard/user/edit/:id' element={<UserEditForm />} />
       </Routes>
     </BrowserRouter>
+    </>
   )
 }
 
