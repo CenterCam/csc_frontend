@@ -16,6 +16,9 @@ import UserEditForm from './Pages/Dashboard/UserEditForm'
 import AdminPostPage from './Pages/Dashboard/AdminPostPage'
 import PostCreateForm from './Pages/Dashboard/PostCreateForm'
 import PostUpdateForm from './Pages/Dashboard/PostUpdateForm'
+import AdminCoursePage from './Pages/Dashboard/AdminCoursePage'
+import CourseCreateForm from './Pages/Dashboard/CourseCreateForm'
+import CourseUpdateForm from './Pages/Dashboard/CourseUpdateForm'
 
 function App() {
  
@@ -40,6 +43,9 @@ function App() {
         <Route path='/dashboard/post' element={<AdminPostPage />} />
         <Route path='/dashboard/post/create' element={<PostCreateForm />} />
         <Route path='/dashboard/post/update/:id' element={<PostUpdateForm />} />
+        <Route path='/dashboard/course' element={<AdminCoursePage />} />
+        <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
+        <Route path='/dashboard/course/update/:id' element={<CourseUpdateForm />} />
       </Routes>
     </BrowserRouter>
     </>
