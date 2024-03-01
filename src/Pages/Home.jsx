@@ -1,11 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../Components/Frontend-Navbar/Navbar'
 import Footer from '../Components/Frontend-Footer/Footer'
 import Carousel from '../Components/Carousel/Carousel'
 import PostCard from '../Components/Card/PostCard'
 import Flag from '../Components/Flag/Flag'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 export default function Home() {
+  //authentication
+  const auth = Cookies.get("csc_token");
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if (auth == null ) {  
+        navigate("/signin");
+    }
+  },[auth]);
+
+  console.log(auth);
+  //authentication
   const [items,setItem]= useState(["item1","item2","item3","item4"])
   return (
     <div>

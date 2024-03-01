@@ -1,8 +1,16 @@
+import Cookies from 'js-cookie';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Navbar({page}) {
+  const auth = Cookies.get("csc_token");
+  const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
+  const logout = (e)=>{
+    e.preventDefault();
+    Cookies.remove("csc_token");
+    navigate("/");
+  }
   return (
     <nav className="sticky bg-white w-full z-50 top-0 start-0 border-b shadow-lg ">
         <div className="flex flex-wrap items-center justify-between mx-auto p-3">
@@ -38,7 +46,13 @@ export default function Navbar({page}) {
                 </div>
             </div>
             <div className='flex space-x-3 relative'>
-                <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
+                {
+                    auth != null ? 
+                    <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Log out</button>
+                    :
+                    <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
+                }
+                
                 <div className='xl:hidden cursor-pointer hover:scale-110 transition'  onClick={()=>setMenu(!menu)}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 6h18M3 12h18M3 18h18"/></svg>
                 </div>

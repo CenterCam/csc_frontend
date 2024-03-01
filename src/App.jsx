@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './Pages/Home'
 import Blog from './Pages/Blog'
 import Scholarship from './Pages/Scholarship'
@@ -21,8 +21,7 @@ import CourseCreateForm from './Pages/Dashboard/CourseCreateForm'
 import CourseUpdateForm from './Pages/Dashboard/CourseUpdateForm'
 
 function App() {
- 
-  return (
+return (
     <>
      <Toaster position='bottom-right' expand={false} richColors  />
     <BrowserRouter>
