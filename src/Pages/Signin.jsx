@@ -19,10 +19,13 @@ export default function Signin() {
     if (email!= "" && password != "") {
         try {
             const response = await axios.post(url, data, { headers });
-            console.log('Response:', response.data);
-            Cookies.set('csc_token', response.data.token, { expires: 7 });
+            Cookies.set('csc_token', JSON.stringify(response.data) , { expires: 7 });
             toast.success("Login Successfully")
-            navigate("/")
+            if (response.data.user.role == "admin") {
+              navigate("/dashboard")
+            }else{
+              navigate("/")
+            }
           } catch (error) {
             console.error('Error:', error);
             toast.error("Email or password is incorrect!")
