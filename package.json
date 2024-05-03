@@ -14,9 +14,11 @@
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^5.32.1",
     "@tanstack/react-query-devtools": "^5.32.1",
+    "@tanstack/react-table": "^8.16.0",
     "@tiptap/extension-color": "^2.3.1",
     "@tiptap/extension-list-item": "^2.3.1",
     "@tiptap/extension-text-style": "^2.3.1",
@@ -43,6 +45,7 @@
     "zod": "^3.23.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@tanstack/eslint-plugin-query": "^5.32.1",
     "@types/node": "^20.12.8",
     "@types/react": "^18.2.43",
