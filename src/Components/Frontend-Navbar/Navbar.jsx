@@ -27,23 +27,23 @@ export default function Navbar({page}) {
             </Link>
             <div className="hidden  xl:flex xl:items-center">
                 <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-default">
-                    <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-3 lg:space-x-9 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-white">
-                    <li className={page == "/" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                        <Link to="/" className= 'block py-2 px-3 text-black rounded'>Home</Link>
-                    </li>
-                    <li className={page == "/blog" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                        <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>Blog</Link>
-                    </li>
-                    <li className={page == "/scholarship" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                        <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Scholarship</Link>
-                    </li>
-                    <li className={page == "/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                        <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
-                    </li>
-                    <li className={page == "/contact" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                        <Link to="/contact" className= 'block py-2 px-3 text-black rounded'>Contact</Link>
-                    </li>
-                    </ul>
+                    <div className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-3 lg:space-x-9 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-white">
+                        <div className={page == "/" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                            <Link to="/" className= 'block py-2 px-3 text-black rounded'>Home</Link>
+                        </div>
+                        <div className={page == "/blog" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                            <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>Blog</Link>
+                        </div>
+                        <div className={page == "/scholarship" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                            <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Scholarship</Link>
+                        </div>
+                        <div className={page == "/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                            <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
+                        </div>
+                        <div className={page == "/contact" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                            <Link to="/contact" className= 'block py-2 px-3 text-black rounded'>Contact</Link>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className='flex space-x-3 relative'>

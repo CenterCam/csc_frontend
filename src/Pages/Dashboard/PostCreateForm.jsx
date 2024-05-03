@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard';
 import { toast } from 'sonner';
 import Footer from '../../Components/Frontend-Footer/Footer';
+import Tiptap from '@/Components/text-editor/Tittap';
 
 export default function PostCreateForm() {
     const [title, setTitle] = useState("");
@@ -73,10 +74,6 @@ export default function PostCreateForm() {
                             <input value={shortDesc} onChange={(e)=>setShortDesc(e.target.value)} type="text" id="shortDescription" name="shortDescription" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
                     </div>
                     <div>
-                            <label for="content" className="block mb-2 text-sm font-medium text-gray-900 ">Short Description</label>
-                            <textarea className='border-2 rounded-lg w-full' value={content} onChange={(e)=>setContent(e.target.value)}  name="content" id="" cols="30" rows="10"></textarea>
-                    </div>
-                    <div>
                         <p className='text-sm font-medium'>Change Image</p>
                         <input onChange={handleFileChange} className="block w-full p-2 file:border-none file:rounded-lg mt-3 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  " id="file_input" type="file" />
                         {selectedFile && (
@@ -88,6 +85,10 @@ export default function PostCreateForm() {
                             />
                             </div>
                         )}
+                    </div>
+                    <div>
+                            <label for="content" className="block mb-2 text-sm font-medium text-gray-900 ">Description</label>
+                            <Tiptap setDescription={setContent} />
                     </div>
                     <button type="submit " onClick={submit} className="font-medium p-2 rounded-full px-4 text-sm bg-green-600 text-white my-3" >Submit</button>
                 </form>

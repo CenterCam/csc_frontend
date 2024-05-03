@@ -18,20 +18,20 @@ export default function NavbarDashboard({page}) {
         </Link>
         <div className="hidden  xl:flex xl:items-center">
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-default">
-                <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-3 lg:space-x-9 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-white">
-                <li className={page == "/dashboard" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                <div className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-3 lg:space-x-9 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-white">
+                <div className={page == "/dashboard" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard" className= 'block py-2 px-3 text-black rounded'>Dashboard</Link>
-                </li>
-                <li className={page == "/dashboard/user" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                </div>
+                <div className={page == "/dashboard/user" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard/user" className= 'block py-2 px-3 text-black rounded'>User</Link>
-                </li>
-                <li className={page == "/dashboard/post" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                </div>
+                <div className={page == "/dashboard/post" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard/post" className= 'block py-2 px-3 text-black rounded'>Post</Link>
-                </li>
-                <li className={page == "/dashboard/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
+                </div>
+                <div className={page == "/dashboard/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                     <Link to="/dashboard/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
-                </li>
-                </ul>
+                </div>
+                </div>
             </div>
         </div>
         <div className='flex space-x-3 relative'>

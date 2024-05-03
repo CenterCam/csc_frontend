@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { toast } from 'sonner';
+import Tiptap from '@/Components/text-editor/Tittap';
+import parser from 'html-react-parser';
 
 export default function UserCreateForm() {
     const [name, setName] = useState("");
@@ -17,6 +19,8 @@ export default function UserCreateForm() {
         }
         toast.success("User have been created")
     }
+    const [description,setDescription] = useState("");
+    console.log(description);
   return (
     <div>
         <NavbarDashboard />
