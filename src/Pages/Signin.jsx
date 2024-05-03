@@ -1,63 +1,107 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form'
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { z } from 'zod';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { useMutation } from '@tanstack/react-query';
 
 export default function Signin() {
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
   const navigate = useNavigate();
-  const login = async (e)=>{
-    e.preventDefault();
-    const url = "http://127.0.0.1:8000/api/login";
-    const data = {email:email,password:password};
-    const headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    };
-    if (email!= "" && password != "") {
-        try {
-            const response = await axios.post(url, data, { headers });
-            Cookies.set('csc_token', JSON.stringify(response.data) , { expires: 7 });
-            toast.success("Login Successfully")
-            if (response.data.user.role == "admin") {
-              navigate("/dashboard")
-            }else{
-              navigate("/")
-            }
-          } catch (error) {
-            console.error('Error:', error);
-            toast.error("Email or password is incorrect!")
-          }
-        } else {
-          alert("All Fields Are Required");
-        }
-  }
 
+  const formSchema = z.object({
+    email: z.string().email({
+      message: "Invalid email address.",
+    }),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
+    }),
+  })
+
+  const form = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          email: "",
+          password : ""
+        },
+    })
+
+const onSubmit = async (data) => {
+ await signInMutation(data);
+}
+
+const { mutateAsync : signInMutation } = useMutation({
+  mutationFn : async (state)=>{
+    try {
+      const response = await axios.post(`${proxy}/api/login`,
+        {
+          email : state.email,
+          password : state.password
+        }
+      ) ;
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  onSuccess : (response) => {
+    Cookies.set('csc_token', JSON.stringify(response.data) , { expires: 7 });
+    navigate("/")
+    toast.success("Sign In Successfully");
+  },
+  onError : (err) => {
+    toast.error(err.response.data.message);
+  }
+})
 
   return (
     <div className='bg-gray-100 h-screen flex justify-center items-center'>
         <div className='w-96 p-6 shadow-lg rounded-lg bg-white xl:w-1/3'>
-            <div className="flex items-center space-x-3 mb-6">
-                <a href="/">
-                    <img src="/logo.jpg" className="h-16" alt="" />
-                </a>
-                <p className="">Cambodia Scholarship Center</p>
+        <div className="flex items-center space-x-3 mb-6">
+            <a href="/">
+                <img src="/logo.jpg" className="h-16" alt="" />
+            </a>
+            <h1 className="font-bold text-lg">Cambodia Scholarship Center</h1>
+        </div>
+        <Form {...form} className="space-y-8 flex flex-col">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                        <Input type="password" placeholder="Password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            <div className='flex flex-col'>
+                <Link to={"/signup"} className='mb-3 hover:underline'>Click here to create an account ?</Link>
+                <Button type="submit">Log In</Button>
             </div>
-            <div>
-                <label className='text-sm my-2 font-medium'>Email</label>
-                <input onChange={(e)=>setEmail(e.target.value)} type="text" className='border-2 h-12 rounded-lg w-full p-3' />
-            </div>
-            <div className='mt-3'>
-                <label className='text-sm my-2 font-medium'>Password</label>
-                <input onChange={(e)=>setPassword(e.target.value)} type="password" className='border-2 h-12 rounded-lg w-full p-3' />
-            </div>
-
-            <div className='mt-6 flex justify-between items-center'>
-                <a href="/signup" className='underline text-gray-500'>Create an account ?</a>
-                <button onClick={login} className='py-2 px-4 rounded-lg bg-slate-900 text-white'>Login</button>
-            </div>
+        </form>
+        </Form>
         </div>
     </div>
   )

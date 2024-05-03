@@ -19,10 +19,13 @@ import PostUpdateForm from './Pages/Dashboard/PostUpdateForm'
 import AdminCoursePage from './Pages/Dashboard/AdminCoursePage'
 import CourseCreateForm from './Pages/Dashboard/CourseCreateForm'
 import CourseUpdateForm from './Pages/Dashboard/CourseUpdateForm'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 function App() {
+  const queryClient = new QueryClient()
 return (
-    <>
+  <QueryClientProvider client={queryClient}>
      <Toaster position='bottom-right' expand={false} richColors  />
     <BrowserRouter>
       <Routes>
@@ -47,7 +50,8 @@ return (
         <Route path='/dashboard/course/update/:id' element={<CourseUpdateForm />} />
       </Routes>
     </BrowserRouter>
-    </>
+    <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }
 
