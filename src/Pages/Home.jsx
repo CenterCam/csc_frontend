@@ -4,10 +4,8 @@ import Footer from '../Components/Frontend-Footer/Footer'
 import Carousel from '../Components/Carousel/Carousel'
 import PostCard from '../Components/Card/PostCard'
 import Flag from '../Components/Flag/Flag'
-import { UserRedirect } from '../Utils/UserRediect'
 
 export default function Home() {
-  UserRedirect();
   const [items,setItem]= useState(["item1","item2","item3","item4"])
   return (
     <div>

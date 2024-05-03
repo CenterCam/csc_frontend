@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '../ui/button';
 
 export default function Navbar({page}) {
   const auth = Cookies.get("csc_token");
