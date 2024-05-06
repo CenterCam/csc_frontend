@@ -2,62 +2,163 @@ import React, { useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { toast } from 'sonner';
+import Tiptap from '@/Components/text-editor/Tittap';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useParams } from 'react-router-dom';
+import { users } from '@/Components/Table/RandomUser';
 
-export default function UserEditForm() {
-    const [name, setName] = useState("Hong Reach");
-    const [email, setEmail] = useState("nureach@gmail.com");
-    const [role, setRole] = useState("admin");
-    const [status, setStatus] = useState("active");
-    const [password, setPassword] = useState("1234");
-    const [confirmPassword, setConfirmPassword] = useState("1234");
-    const submit = (e)=>{
-        e.preventDefault();
-        if (password != confirmPassword) {
-            toast.error("Password does not match")
-        }else{
+export default function UserCreateForm() {
+    const {id} = useParams();
+    const user = users.find((item)=>item.id == id);
 
-            toast.success("User have been updated")
+    const formSchema = z.object({
+        name: z.string().min(1,{
+            message: " Name must be at least 1 characters.",
+          }),
+        email: z.string().email({
+          message: "Invalid email address.",
+        }),
+        role: z.string().default("user"),
+        status: z.string().default("active"),
+        password: z.string(),
+        confirm_password: z.string(),
+      }).refine(
+        (values) => {
+          return values.password === values.confirm_password;
+        },
+        {
+          message: "Passwords must match!",
+          path: ["confirm_password"],
         }
-    }
+      );
+      const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name : user ? user.name : "",
+            email: user ? user.email :"",
+            role : user ? user.role : "",
+            status : user ? user.status : "",
+            password : "",
+            confirm_password : "",
+          },
+      })
+
+      const onSubmit = async (data)=>{
+        console.log(data);
+      }
   return (
     <div>
         <NavbarDashboard />
         <div className='p-3 w-full flex justify-center items-center'>
             <div className=" w-full md:w-1/2 ">
-                <p className="my-3 font-bold text-black text-lg" >Create User</p>
-                <form className="space-y-6">
-                    <div>
-                            <label for="name" className="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
-                            <input value={name} onChange={(e)=>setName(e.target.value)} type="text" id="name" name="name" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
+                <p className="my-3 font-bold text-black text-3xl" >Update User</p>
+                <Form {...form} className="space-y-8 flex flex-col">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Email" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified role to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="user">User</SelectItem>
+                                <SelectItem value="admin">Admin</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified status to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input type="password" placeholder="Password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="confirm_password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                                <Input type="password" placeholder="Confirm Password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <div className='flex flex-col'>
+                        <Button type="submit">Update User</Button>
                     </div>
-                    <div>
-                            <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                            <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" id="email" name="email" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="role" className="block mb-2 text-sm font-medium text-gray-900 ">Role</label>
-                            <select value={role} type="text" onChange={(e)=>setRole(e.target.value)} id="role" name="role" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="admin">Admin</option>
-                                <option value="user">User</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="status" className="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
-                            <select  value={status} onChange={(e)=>setStatus(e.target.value)} type="text" id="role" name="status" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="active">active</option>
-                                <option value="deactivate">deactivate</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-                            <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" id="password" name="password" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password</label>
-                            <input value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} type="password" id="confirm_password" name="password_confirmation" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <button type="submit " onClick={submit} className="font-medium p-2 rounded-full px-4 text-sm bg-green-600 text-white my-3" >Update</button>
                 </form>
+                </Form>
             </div>
         </div>
         <Footer />

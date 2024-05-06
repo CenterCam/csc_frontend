@@ -21,6 +21,7 @@ import CourseCreateForm from './Pages/Dashboard/CourseCreateForm'
 import CourseUpdateForm from './Pages/Dashboard/CourseUpdateForm'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import UserCreateEditForm from './Pages/Dashboard/UserCreateForm'
 
 function App() {
   const queryClient = new QueryClient()
