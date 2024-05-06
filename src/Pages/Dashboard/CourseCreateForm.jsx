@@ -1,75 +1,196 @@
 import React, { useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+
 
 export default function CourseCreateForm() {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [type, setType] = useState('');
-    const [duration, setDuration] = useState('');
-    const [cost, setCost] = useState(0); // Assuming cost is a number
-    const [discount, setDiscount] = useState(0); // Assuming discount is a number
-    const [price, setPrice] = useState(0); // Assuming price is a number
-    const [author, setAuthor] = useState('');
-    const [imageLink, setImageLink] = useState('');
 
-    const submit = (e)=>{
-        e.preventDefault();
-        toast.success("Post have been created");
-    }
+    const formSchema = z.object({
+        title: z.string().min(6,{
+                message: "Title must be at least 6 characters.",
+        }),
+        shortDescription: z.string().min(18,{
+                message: "Description must be at least 18 characters.",
+        }),
+        type: z.string().min(3,{
+                message: " Type must be Required.",
+        }),
+        status: z.string().min(3,{
+                message: " Status must be at Required.",
+        }),
+        duration: z.string().min(3,{
+                message: "Duration must be at least 18 characters.",
+        }),
+        price:  z.string()
+        .transform(v => parseFloat(v))
+        .refine( v => v > 0 , {message:"Price Must Be Greater than 0"}),
+        discount:  z.string()
+        .transform(v => parseFloat(v))
+        .refine( v => v >= 0 && v <= 100 , {message:"Discount Must Be From 0 to 100"}),
+        
+        image_url: z.string().url(),
+      })
+      const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title :  "",
+            shortDescription :"",
+            type:"",
+            status : "",
+            duration :"",
+            price :"",
+            discount :"",
+            image_url :"",
+          },
+      })
 
+      const onSubmit = async (data)=>{
+        console.log(data);
+      }
   return (
     <div>
         <NavbarDashboard />
         <div className='p-3 w-full flex justify-center items-center'>
             <div className=" w-full md:w-1/2 ">
-                <p className="my-3 font-bold text-black text-lg" >Create Course</p>
-                <form className="space-y-6">
-                    <div>
-                            <label for="title" className="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
-                            <input value={title} onChange={(e)=>setTitle(e.target.value)} type="text" id="title" name="title" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
+                <p className="my-3 font-bold text-black text-3xl" >Create Course</p>
+                <Form {...form} className="space-y-8 flex flex-col">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="shortDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Short Description</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Short Description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="type"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified type to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="Free">Free</SelectItem>
+                                <SelectItem value="Paid">Paid</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified status to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                <FormField
+                        control={form.control}
+                        name="duration"
+                        render={({ field }) => (
+                        <FormItem>
+                                <FormLabel>Duration</FormLabel>
+                                <FormControl>
+                                <Input placeholder="Duration" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                        </FormItem>
+                        )}
+                        />
+                <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Price" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                <FormField
+                    control={form.control}
+                    name="discount"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Discount</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Discount"  {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                <FormField
+                    control={form.control}
+                    name="image_url"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Image Url</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Image Url" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                                
+                    <div className='flex flex-col'>
+                        <Button type="submit">Creacte Course</Button>
                     </div>
-                    <div>
-                            <label for="description" className="block mb-2 text-sm font-medium text-gray-900 ">Description</label>
-                            <input value={description} onChange={(e)=>setDescription(e.target.value)} type="text" id="description" name="description" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="type" className="block mb-2 text-sm font-medium text-gray-900 ">Type</label>
-                            <select value={type} type="text" onChange={(e)=>setType(e.target.value)} id="type" name="type" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="">Free</option>
-                                <option value="">Paid</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="duration" className="block mb-2 text-sm font-medium text-gray-900 ">Duration</label>
-                            <input value={duration} onChange={(e)=>setDuration(e.target.value)} type="text" id="duration" name="duration" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="cost" className="block mb-2 text-sm font-medium text-gray-900 ">Cost</label>
-                            <input value={cost} onChange={(e)=>setCost(e.target.value)} type="text" id="cost" name="cost" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="discount" className="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
-                            <input value={discount} onChange={(e)=>setDiscount(e.target.value)} type="text" id="discount" name="discount" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="price" className="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
-                            <input value={price} onChange={(e)=>setPrice(e.target.value)} type="text" id="price" name="price" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="author" className="block mb-2 text-sm font-medium text-gray-900 ">Author</label>
-                            <input value={author} onChange={(e)=>setAuthor(e.target.value)} type="text" id="author" name="author" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="imageLink" className="block mb-2 text-sm font-medium text-gray-900 ">ImageLink</label>
-                            <input value={imageLink} onChange={(e)=>setImageLink(e.target.value)} type="text" id="imageLink" name="imageLink" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <button type="submit " onClick={submit} className="font-medium p-2 rounded-full px-4 text-sm bg-green-600 text-white my-3" >Submit</button>
                 </form>
+                </Form>
             </div>
         </div>
         <Footer />
     </div>
   )
 }
-
