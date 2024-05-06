@@ -1,4 +1,4 @@
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash, Trash2 } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -8,6 +8,18 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+  import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  
 import { Input } from '../ui/input';
 import MyPagination from '../Pagination/MyPagination';
   
@@ -55,8 +67,23 @@ export default function UserTable({users}) {
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.role}</div>
                         <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.status}</div>
                         <div className='flex justify-center w-20 gap-1'>
-                            <Link><Edit /></Link>
-                            <Link><Trash2 /></Link>
+                            <Link to={`/dashboard/user/edit/${item.id}`}><Edit /></Link>
+                            <AlertDialog>
+                                <AlertDialogTrigger><Trash /></AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete your account
+                                        and remove your data from our servers.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={()=>alert("delete")} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                                </AlertDialog>
                         </div>
                     </div>
                 ))
