@@ -45,10 +45,10 @@ return (
         <Route path='/dashboard/user/edit/:id' element={<UserEditForm />} />
         <Route path='/dashboard/post' element={<AdminPostPage />} />
         <Route path='/dashboard/post/create' element={<PostCreateForm />} />
-        <Route path='/dashboard/post/update/:id' element={<PostUpdateForm />} />
+        <Route path='/dashboard/post/edit/:id' element={<PostUpdateForm />} />
         <Route path='/dashboard/course' element={<AdminCoursePage />} />
         <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
-        <Route path='/dashboard/course/update/:id' element={<CourseUpdateForm />} />
+        <Route path='/dashboard/course/edit/:id' element={<CourseUpdateForm />} />
       </Routes>
     </BrowserRouter>
     <ReactQueryDevtools initialIsOpen={false} />

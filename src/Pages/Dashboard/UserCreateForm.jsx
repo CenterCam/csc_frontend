@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
-import { toast } from 'sonner';
-import Tiptap from '@/Components/text-editor/Tittap';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,8 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { useParams } from 'react-router-dom';
-import { users } from '@/Components/Table/RandomUser';
+
 
 export default function UserCreateEditForm() {
 

@@ -1,96 +1,194 @@
 import React, { useState } from 'react'
-import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard';
-import Footer from '../../Components/Frontend-Footer/Footer';
-import { toast } from 'sonner';
+import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
+import Footer from '../../Components/Frontend-Footer/Footer'
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { Label } from '@/Components/ui/label';
+import Tiptap from '@/Components/text-editor/Tittap';
+
 
 export default function PostUpdateForm() {
-    const [title, setTitle] = useState("Scholarship to Cambodia");
-    const [country, setCountry] = useState("Cambodia");
-    const [status, setStatus] = useState("New");
-    const [program, setProgram] = useState("Bachelor");
-    const [category, setCategory] = useState("News");
-    const [deadline, setDeadline] = useState("15/02/2024");
-    const [shortDesc, setShortDesc] = useState("Welcom to our scholarship");
-    const [content, setContent] = useState("Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam soluta totam ratione, labore voluptas, eaque sequi modi, quibusdam facere sint iure suscipit culpa perferendis iste accusamus numquam. Sequi, assumenda delectus.");
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
-    const submit = (e)=>{
-        e.preventDefault();
-        toast.success("Post have been created");
-    }
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-    
-        if (file) {
-          setSelectedFile(file);
-    
-          // Read the file and set the image preview
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setImagePreview(reader.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
+
+    const [content , setContent] = useState('');
+
+    const formSchema = z.object({
+        title: z.string().min(6,{
+            message: " Title must be at least 6 characters.",
+          }),
+          shortDescription: z.string().min(18,{
+            message: " Short Description must be at least 18 characters.",
+          }),
+        country: z.string().min(3,{
+            message: " Country must be at least 3 characters.",
+          }),
+          program: z.string().min(3,{
+            message: " Program must be at least 3 characters.",
+          }),
+          status: z.string().min(3,{
+            message: " Country must be at least 3 characters.",
+          }),
+          category: z.string().min(3,{
+            message: " Category must be at least 3 characters.",
+          }),
+          image_url: z.string().default(""),
+          content: z.string().default(""),
+      })
+      const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title :  "",
+            shortDescription :"",
+            country:"",
+            program : "",
+            status :  "",
+            category :"",
+            image_url :"",
+            content :"",
+          },
+      })
+
+      const onSubmit = async (data)=>{
+        data.content = content;
+        console.log(data);
+      }
   return (
     <div>
         <NavbarDashboard />
         <div className='p-3 w-full flex justify-center items-center'>
             <div className=" w-full md:w-1/2 ">
-                <p className="my-3 font-bold text-black text-lg" >Update Post</p>
-                <form className="space-y-6">
-                    <div>
-                            <label for="title" className="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
-                            <input value={title} onChange={(e)=>setTitle(e.target.value)} type="text" id="title" name="title" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="country" className="block mb-2 text-sm font-medium text-gray-900 ">Country</label>
-                            <input value={country} onChange={(e)=>setCountry(e.target.value)} type="text" id="email" name="email" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="program" className="block mb-2 text-sm font-medium text-gray-900 ">Program</label>
-                            <select value={program} type="text" onChange={(e)=>setProgram(e.target.value)} id="program" name="program" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="">Bachelor</option>
-                                <option value="">Master</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="status" className="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
-                            <select  value={status} onChange={(e)=>setStatus(e.target.value)} type="text" id="status" name="status" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="">New</option>
-                                <option value="">Hot</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="category" className="block mb-2 text-sm font-medium text-gray-900 ">Category</label>
-                            <select  value={category} onChange={(e)=>setCategory(e.target.value)} type="text" id="category" name="category" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="">News</option>
-                                <option value="">Scholarship</option>
-                            </select>
-                    </div>
-                    <div>
-                            <label for="shortDescription" className="block mb-2 text-sm font-medium text-gray-900 ">Short Description</label>
-                            <input value={shortDesc} onChange={(e)=>setShortDesc(e.target.value)} type="text" id="shortDescription" name="shortDescription" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 " />
-                    </div>
-                    <div>
-                            <label for="content" className="block mb-2 text-sm font-medium text-gray-900 ">Content</label>
-                            <textarea className='border-2 p-2 rounded-lg w-full' value={content} onChange={(e)=>setContent(e.target.value)}  name="content" id="" cols="30" rows="10"></textarea>
-                    </div>
-                    <div>
-                        <p className='text-sm font-medium'>Change Image</p>
-                        <input onChange={handleFileChange} className="block w-full p-2 file:border-none file:rounded-lg mt-3 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  " id="file_input" type="file" />
-                        {selectedFile && (
-                            <div className='mt-3'>
-                            <img
-                                src={imagePreview}
-                                alt="Preview"
-                                style={{ maxWidth: '100%', maxHeight: '200px' }}
-                            />
-                            </div>
+                <p className="my-3 font-bold text-black text-3xl" >Update Post</p>
+                <Form {...form} className="space-y-8 flex flex-col">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="shortDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Short Description</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Short Description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Country</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified role to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="cambodia">Cambodia</SelectItem>
+                                <SelectItem value="singapor">Singarpore</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
                         )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified status to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="program"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Program</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified program to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="category"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Category</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified category to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <div className="grid w-full gap-1.5">
+                        <Label htmlFor="picture">Picture</Label>
+                        <Input id="picture" type="file" />
                     </div>
-                    <button type="submit " onClick={submit} className="font-medium p-2 rounded-full px-4 text-sm bg-green-600 text-white my-3" >Submit</button>
+
+                    <div>
+                        <Label htmlFor="picture">Content</Label>
+                        <Tiptap setDescription={setContent} />
+                    </div>
+                   
+                    <div className='flex flex-col'>
+                        <Button type="submit">Update Post</Button>
+                    </div>
                 </form>
+                </Form>
             </div>
         </div>
         <Footer />
