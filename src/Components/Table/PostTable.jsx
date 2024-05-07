@@ -54,7 +54,7 @@ export default function PostTable({users}) {
             <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>Title</div>
             <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>Program</div>
             <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>Country</div>
-            <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>Status</div>
+            <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>Deadline</div>
             <div className='flex justify-center w-20'>Action</div>
         </div>
         <div className='mt-3 gap-9 capitalize flex flex-col'>
