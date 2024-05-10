@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './Pages/Home'
 import Blog from './Pages/Blog'
 import Scholarship from './Pages/Scholarship'
@@ -22,6 +22,7 @@ import CourseUpdateForm from './Pages/Dashboard/CourseUpdateForm'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import UserCreateEditForm from './Pages/Dashboard/UserCreateForm'
+import Cookies from 'js-cookie'
 
 function App() {
   const queryClient = new QueryClient()
@@ -38,17 +39,19 @@ return (
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/postDetail" element={<PostDetail />} />
-        <Route path="/courseDetail" element={<CourseDetail />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/dashboard/user' element={<AdminUser />} />
-        <Route path='/dashboard/user/create' element={<UserCreateForm />} />
-        <Route path='/dashboard/user/edit/:id' element={<UserEditForm />} />
-        <Route path='/dashboard/post' element={<AdminPostPage />} />
-        <Route path='/dashboard/post/create' element={<PostCreateForm />} />
-        <Route path='/dashboard/post/edit/:id' element={<PostUpdateForm />} />
-        <Route path='/dashboard/course' element={<AdminCoursePage />} />
-        <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
-        <Route path='/dashboard/course/edit/:id' element={<CourseUpdateForm />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/courseDetail" element={<CourseDetail />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/dashboard/user' element={<AdminUser />} />
+          <Route path='/dashboard/user/create' element={<UserCreateForm />} />
+          <Route path='/dashboard/user/edit/:id' element={<UserEditForm />} />
+          <Route path='/dashboard/post' element={<AdminPostPage />} />
+          <Route path='/dashboard/post/create' element={<PostCreateForm />} />
+          <Route path='/dashboard/post/edit/:id' element={<PostUpdateForm />} />
+          <Route path='/dashboard/course' element={<AdminCoursePage />} />
+          <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
+          <Route path='/dashboard/course/edit/:id' element={<CourseUpdateForm />} />
+        </Route>
       </Routes>
     </BrowserRouter>
     <ReactQueryDevtools initialIsOpen={false} />
@@ -57,3 +60,10 @@ return (
 }
 
 export default App
+
+
+export const ProtectedRoutes = () => {
+  const isAuth = JSON.parse(Cookies.get('csc_token'));
+  console.log();
+  return isAuth ? <Outlet /> : <Navigate to={"/signin"} />
+}

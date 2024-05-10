@@ -10,6 +10,8 @@ import { z } from 'zod';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { useMutation } from '@tanstack/react-query';
+import { proxy } from '@/Utils/Utils';
+import { Loader2 } from 'lucide-react';
 
 export default function Signin() {
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const onSubmit = async (data) => {
  await signInMutation(data);
 }
 
-const { mutateAsync : signInMutation } = useMutation({
+const { isPending , mutateAsync : signInMutation } = useMutation({
   mutationFn : async (state)=>{
     try {
       const response = await axios.post(`${proxy}/api/login`,
@@ -50,7 +52,7 @@ const { mutateAsync : signInMutation } = useMutation({
     }
   },
   onSuccess : (response) => {
-    Cookies.set('csc_token', JSON.stringify(response.data) , { expires: 7 });
+    Cookies.set('csc_token', JSON.stringify(response.token) , { expires: 1 });
     navigate("/")
     toast.success("Sign In Successfully");
   },
@@ -98,7 +100,14 @@ const { mutateAsync : signInMutation } = useMutation({
             />
             <div className='flex flex-col'>
                 <Link to={"/signup"} className='mb-3 hover:underline'>Click here to create an account ?</Link>
-                <Button type="submit">Log In</Button>
+                {
+                  isPending ? 
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </Button>:
+                  <Button type="submit">Log In</Button>
+                }
             </div>
         </form>
         </Form>
