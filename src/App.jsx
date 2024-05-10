@@ -23,6 +23,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import UserCreateEditForm from './Pages/Dashboard/UserCreateForm'
 import Cookies from 'js-cookie'
+import { useContext } from 'react'
+import { Store } from './Utils/Store'
 
 function App() {
   const queryClient = new QueryClient()
@@ -63,7 +65,7 @@ export default App
 
 
 export const ProtectedRoutes = () => {
-  const isAuth = JSON.parse(Cookies.get('csc_token'));
-  console.log();
-  return isAuth ? <Outlet /> : <Navigate to={"/signin"} />
+  const {state , dispatch} = useContext(Store);
+  const {csc_user} = state;
+  return csc_user ? <Outlet /> : <Navigate to={"/signin"} />
 }

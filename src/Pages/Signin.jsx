@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form'
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -12,9 +12,12 @@ import { Input } from '@/Components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { proxy } from '@/Utils/Utils';
 import { Loader2 } from 'lucide-react';
+import { Store } from '@/Utils/Store';
 
 export default function Signin() {
   const navigate = useNavigate();
+
+  const {state , dispatch} = useContext(Store);
 
   const formSchema = z.object({
     email: z.string().email({
@@ -52,11 +55,12 @@ const { isPending , mutateAsync : signInMutation } = useMutation({
     }
   },
   onSuccess : (response) => {
-    Cookies.set('csc_token', JSON.stringify(response.token) , { expires: 1 });
-    navigate("/")
+    dispatch({type:"USER_SIGNIN", payload : response});
+    navigate("/");
     toast.success("Sign In Successfully");
   },
   onError : (err) => {
+    console.log(err);
     toast.error(err.response.data.message);
   }
 })

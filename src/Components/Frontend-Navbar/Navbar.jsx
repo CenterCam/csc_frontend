@@ -1,11 +1,13 @@
 import Cookies from 'js-cookie';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button';
+import { Store } from '@/Utils/Store';
 
 export default function Navbar({page}) {
-  const auth = Cookies.get("csc_token");
   const navigate = useNavigate();
+  const {state , dispatch} = useContext(Store);
+  const {csc_user} = state;
   const [menu, setMenu] = useState(false);
   const logout = (e)=>{
     e.preventDefault();
@@ -48,7 +50,11 @@ export default function Navbar({page}) {
             </div>
             <div className='flex space-x-3 relative'>
                 {
-                    auth != null ? 
+                    csc_user.user.role == 'admin' && <Link to="/dashboard"><Button>Dashboard</Button></Link>
+                }
+
+                {
+                    csc_user != null ? 
                     <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Log out</button>
                     :
                     <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
@@ -60,7 +66,7 @@ export default function Navbar({page}) {
                 {
                     menu && 
                     <div className='xl:hidden absolute right-0 top-16   '>
-                        <ul className="flex flex-col p-4 w-60 font-medium border border-gray-100 rounded-lg bg-white">
+                        <ul className="flex flex-col p-4 w-60 font-medium border border-gray-100 rounded-lg bg-white list-none">
                             <li>
                                 <Link to="/" className= 'block py-2 px-3 text-black rounded'>Home</Link>
                             </li>

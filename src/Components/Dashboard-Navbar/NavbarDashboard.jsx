@@ -1,8 +1,20 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Store } from '@/Utils/Store';
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '../ui/button';
 
 export default function NavbarDashboard({page}) {
   const [menu, setMenu] = useState(false);
+  const {state , dispatch} = useContext(Store);
+  const navigate = useNavigate();
+  const {csc_user} = state;
+  const logout = (e)=>{
+    e.preventDefault();
+    dispatch({
+        type : "USER_SIGNOUT"
+    });
+    navigate("/");
+  }
   return (
     <nav className="sticky bg-white w-full z-50 top-0 start-0 border-b shadow-lg ">
     <div className="flex flex-wrap items-center justify-between mx-auto p-3">
@@ -35,14 +47,24 @@ export default function NavbarDashboard({page}) {
             </div>
         </div>
         <div className='flex space-x-3 relative'>
-            <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
+            {
+                csc_user.user.role == 'admin' && <Link className='hidden lg:block' to="/dashboard"><Button>Dashboard</Button></Link>
+            }
+
+            {
+                csc_user != null ? 
+                <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Log out</button>
+                :
+                <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
+            }
+                
             <div className='xl:hidden cursor-pointer hover:scale-110 transition'  onClick={()=>setMenu(!menu)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 6h18M3 12h18M3 18h18"/></svg>
             </div>
             {
                 menu && 
                 <div className='xl:hidden absolute right-0 top-16   '>
-                    <ul className="flex flex-col p-4 w-60 font-medium border border-gray-100 rounded-lg bg-white">
+                    <ul className="flex flex-col p-4 w-60 font-medium border border-gray-100 rounded-lg bg-white list-none">
                         <li>
                             <Link to="/" className= 'block py-2 px-3 text-black rounded'>Dashboard</Link>
                         </li>
