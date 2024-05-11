@@ -11,7 +11,7 @@ export default function CardDashbaord({title,value,icon}) {
                 </div>
             </div>
             <div className='flex w-full  items-center mt-3'>
-                <p className='font-bold text-3xl'>{value}</p>
+                <p className='font-bold text-3xl capitalize'>{value}</p>
             </div>
         </div>
     </>
