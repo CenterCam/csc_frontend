@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -12,10 +12,20 @@ import { Button } from '../ui/button'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import { proxy } from '@/Utils/Utils'
+import { Store } from '@/Utils/Store'
+import { toast } from 'sonner'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
   
 
 export default function CountryDailog({isOpen,setOpen}) {
 
+  const {state , dispatch} = useContext(Store);
+  const {csc_user} = state;
+
+  const queryClient =useQueryClient();
   
   const formSchema = z.object({
     name: z.string().min(1,{
@@ -35,8 +45,40 @@ export default function CountryDailog({isOpen,setOpen}) {
     })
 
     const onSubmit = async (data) => {
-      console.log(data);
+      await createCountryMutation(data);
      }
+
+     const { mutateAsync : createCountryMutation } = useMutation({
+        mutationFn : async (state)=>{
+          try {
+            const response = await axios.post(`${proxy}/api/countries`,
+              {
+                ct_name : state.name,
+                ct_link : state.image_link,
+                status : state.status 
+              }
+              ,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+              }
+            )  
+          } catch (error) {
+            throw error;
+          }
+        },
+        onSuccess : () => {
+          queryClient.invalidateQueries(['data']);
+          toast.success("Country Is Created Successfully");
+          setOpen(false);
+          form.reset();
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
+        
      
 
   return (
@@ -73,19 +115,27 @@ export default function CountryDailog({isOpen,setOpen}) {
                           </FormItem>
                       )}
                       />
-                      <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                          <FormItem>
-                              <FormLabel>Status</FormLabel>
-                              <FormControl>
-                                  <Input type="text" placeholder="Status" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )}
-                      />
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a verified status to display" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="normal">Normal</SelectItem>
+                                <SelectItem value="popular">Popular</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
                       <div className='flex flex-col'>
                           <Button type="submit">Submit</Button>
                       </div>
