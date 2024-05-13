@@ -50,7 +50,7 @@ export default function Navbar({page}) {
             </div>
             <div className='flex space-x-3 relative'>
                 {
-                    csc_user.user.role == 'admin' && <Link to="/dashboard"><Button>Dashboard</Button></Link>
+                    csc_user?.user.role == 'admin' && <Link to="/dashboard"><Button>Dashboard</Button></Link>
                 }
 
                 {
