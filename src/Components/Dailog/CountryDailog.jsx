@@ -78,9 +78,6 @@ export default function CountryDailog({isOpen,setOpen}) {
           toast.error(err.response.data.message);
         }
       })
-        
-     
-
   return (
     <>
         <Dialog open={isOpen} onOpenChange={setOpen}>

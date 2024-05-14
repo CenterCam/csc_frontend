@@ -12,6 +12,12 @@ import { Button } from '../ui/button'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useContext } from 'react'
+import { Store } from '@/Utils/Store'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import { proxy } from '@/Utils/Utils'
+import { toast } from 'sonner'
   
 
 export default function ProgramDailog({isOpen,setOpen}) {
@@ -30,9 +36,42 @@ export default function ProgramDailog({isOpen,setOpen}) {
         },
     })
 
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const queryClient = useQueryClient();
+
     const onSubmit = async (data) => {
-      console.log(data);
+      await createProgramMutation(data);
      }
+
+     const { isPending , mutateAsync : createProgramMutation } = useMutation({
+        mutationFn : async (state)=>{
+          try {
+            const response = await axios.post(`${proxy}/api/program/create`,
+              {
+                name : state.name,
+              }
+              ,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+              }
+            )  
+          } catch (error) {
+            throw error;
+          }
+        },
+        onSuccess : () => {
+          queryClient.invalidateQueries(['data']);
+          toast.success("Country Is Created Successfully");
+          setOpen(!isOpen);
+          form.reset();
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
      
 
   return (
@@ -50,14 +89,14 @@ export default function ProgramDailog({isOpen,setOpen}) {
                           <FormItem>
                               <FormLabel>Name</FormLabel>
                               <FormControl>
-                                  <Input placeholder="Country Name" {...field} />
+                                  <Input placeholder="Program Name" {...field} />
                               </FormControl>
                               <FormMessage />
                           </FormItem>
                       )}
                       />
                       <div className='flex flex-col'>
-                          <Button type="submit">Submit</Button>
+                          <Button disabled={isPending} type="submit">Submit</Button>
                       </div>
                   </form>
                   </Form>
