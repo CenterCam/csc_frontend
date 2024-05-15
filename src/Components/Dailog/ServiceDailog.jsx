@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -12,6 +12,11 @@ import { Button } from '../ui/button'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Store } from '@/Utils/Store'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { proxy } from '@/Utils/Utils'
+import { toast } from 'sonner'
+import axios from 'axios'
   
 
 export default function ServiceDailog({isOpen,setOpen}) {
@@ -30,9 +35,42 @@ export default function ServiceDailog({isOpen,setOpen}) {
         },
     })
 
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const queryClient = useQueryClient();
+
     const onSubmit = async (data) => {
-      console.log(data);
+      await createService(data);
      }
+
+     const { isPending , mutateAsync : createService } = useMutation({
+        mutationFn : async (state)=>{
+          try {
+            const response = await axios.post(`${proxy}/api/service/create`,
+              {
+                name : state.name,
+              }
+              ,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+              }
+            )  
+          } catch (error) {
+            throw error;
+          }
+        },
+        onSuccess : () => {
+          queryClient.invalidateQueries(['data']);
+          toast.success("Service is Created Successfully");
+          setOpen(!isOpen);
+          form.reset();
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
      
 
   return (
