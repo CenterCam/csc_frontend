@@ -33,7 +33,7 @@ export default function UserTable() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const search = queryParams.get("search") || "all";
-    const sortBy = queryParams.get("sortBy") || "name";
+    const sortBy = queryParams.get("sortBy") || "created_at";
     const sortDir = queryParams.get("sortDir") || "desc";
     const page =  queryParams.get("page") || 1;
     const {state , dispatch} = useContext(Store);

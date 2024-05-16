@@ -48,36 +48,36 @@ export default function CountryDailog({isOpen,setOpen}) {
       await createCountryMutation(data);
      }
 
-     const { mutateAsync : createCountryMutation } = useMutation({
-        mutationFn : async (state)=>{
-          try {
-            const response = await axios.post(`${proxy}/api/countries`,
-              {
-                ct_name : state.name,
-                ct_link : state.image_link,
-                status : state.status 
-              }
-              ,
-              {
-                headers : {
-                  authorization : `Bearer ${csc_user.token}`
-              }
-              }
-            )  
-          } catch (error) {
-            throw error;
-          }
-        },
-        onSuccess : () => {
-          queryClient.invalidateQueries(['data']);
-          toast.success("Country Is Created Successfully");
-          setOpen(false);
-          form.reset();
-        },
-        onError : (err) => {
-          toast.error(err.response.data.message);
+    const { mutateAsync : createCountryMutation } = useMutation({
+      mutationFn : async (state)=>{
+        try {
+          const response = await axios.post(`${proxy}/api/countries`,
+            {
+              ct_name : state.name,
+              ct_link : state.image_link,
+              status : state.status 
+            }
+            ,
+            {
+              headers : {
+                authorization : `Bearer ${csc_user.token}`
+            }
+            }
+          )  
+        } catch (error) {
+          throw error;
         }
-      })
+      },
+      onSuccess : () => {
+        queryClient.invalidateQueries(['data']);
+        toast.success("Country Is Created Successfully");
+        setOpen(false);
+        form.reset();
+      },
+      onError : (err) => {
+        toast.error(err.response.data.message);
+      }
+    })
   return (
     <>
         <Dialog open={isOpen} onOpenChange={setOpen}>

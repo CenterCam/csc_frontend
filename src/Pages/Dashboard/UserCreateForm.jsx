@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { z } from 'zod';
@@ -8,6 +8,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { proxy } from '@/Utils/Utils';
+import { Store } from '@/Utils/Store';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function UserCreateEditForm() {
@@ -20,7 +26,6 @@ export default function UserCreateEditForm() {
           message: "Invalid email address.",
         }),
         role: z.string().default("user"),
-        status: z.string().default("active"),
         password: z.string().min(6, {
           message: "Password must be at least 6 characters.",
         }),
@@ -42,14 +47,52 @@ export default function UserCreateEditForm() {
             name :  "",
             email:"",
             role : "",
-            status :  "",
             password :""
           },
       })
 
-      const onSubmit = async (data)=>{
-        console.log(data);
-      }
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    const onSubmit = async (data) => {
+    await createUserMutation(data);
+    }
+
+    const { isPending , mutateAsync : createUserMutation } = useMutation({
+    mutationFn : async (state)=>{
+        try {
+        const response = await axios.post(`${proxy}/api/createUser`,
+            {
+            name:state.name,
+            password:state.password,
+            email:state.email,
+            role:state.role,
+            status:state.status
+            }
+            ,
+            {
+            headers : {
+                authorization : `Bearer ${csc_user.token}`
+            }
+            }
+        )  
+        return response.data;
+        } catch (error) {
+        throw error;
+        }
+    },
+    onSuccess : (response) => {
+        queryClient.invalidateQueries(['data']);
+        toast.success(response.message);
+        navigate("/dashboard/user");
+        form.reset();
+    },
+    onError : (err) => {
+        toast.error(err.response.data.message);
+    }
+    })
   return (
     <div>
         <NavbarDashboard />
@@ -106,27 +149,6 @@ export default function UserCreateEditForm() {
                         )}
                     />
                     <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Role</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                <SelectValue placeholder="Select a verified status to display" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
-                            </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
@@ -153,7 +175,7 @@ export default function UserCreateEditForm() {
                     )}
                     />
                     <div className='flex flex-col'>
-                        <Button type="submit">Creacte User</Button>
+                        <Button disabled={isPending} type="submit">Creacte User</Button>
                     </div>
                 </form>
                 </Form>
