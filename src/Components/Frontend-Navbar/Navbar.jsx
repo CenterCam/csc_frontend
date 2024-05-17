@@ -11,6 +11,7 @@ export default function Navbar({page}) {
   const [menu, setMenu] = useState(false);
   const logout = (e)=>{
     e.preventDefault();
+    dispatch({type:"USER_SIGNOUT"})
     Cookies.remove("csc_token");
     navigate("/");
   }
