@@ -41,7 +41,7 @@ export default function UserTable() {
     const {csc_user} = state;
     const queryClient = useQueryClient();
     const {isLoading , isError, data} = useQuery({ 
-        queryKey: ['data',{search,sortBy,sortDir}], 
+        queryKey: ['users',{search,sortBy,sortDir}], 
         queryFn: async ()=>{
             try {
                 const response = await axios.get(`${proxy}/api/user/pagination/${search}/${sortBy}/${sortDir}?page=${page}`,{
