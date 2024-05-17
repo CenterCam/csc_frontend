@@ -23,10 +23,11 @@ import {
 import { Input } from '../ui/input';
 import MyPagination from '../Pagination/MyPagination';
 import { Store } from '@/Utils/Store'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { proxy } from '@/Utils/Utils'
 import axios from 'axios'
 import Loading from '../ui/Loading'
+import { toast } from 'sonner'
   
 
 export default function UserTable() {
@@ -38,6 +39,7 @@ export default function UserTable() {
     const page =  queryParams.get("page") || 1;
     const {state , dispatch} = useContext(Store);
     const {csc_user} = state;
+    const queryClient = useQueryClient();
     const {isLoading , isError, data} = useQuery({ 
         queryKey: ['data',{search,sortBy,sortDir}], 
         queryFn: async ()=>{
@@ -53,8 +55,31 @@ export default function UserTable() {
             }
         }
       });
-      console.log(data);
-      const navigate = useNavigate();
+
+    const navigate = useNavigate();
+    const { isPending , mutateAsync : deleteUserMutation } = useMutation({
+        mutationFn : async (id)=>{
+          try {
+            const response = await axios.delete(`${proxy}/api/deleteUser/${id}`,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+            }
+            );  
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+        },
+        onSuccess : () => {
+          queryClient.invalidateQueries(['users']);
+          toast.success("User is deleted successfully");
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
   return (
     <>
     <div className='flex justify-between mt-6 flex-wrap gap-3'>
@@ -111,7 +136,7 @@ export default function UserTable() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={()=>alert("delete")} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
+                                    <AlertDialogAction onClick={()=>deleteUserMutation(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                                 </AlertDialog>
