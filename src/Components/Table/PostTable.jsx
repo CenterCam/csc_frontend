@@ -118,7 +118,7 @@ export default function PostTable({users}) {
                 :
                 data?.data?.map((item,i)=>(
                     <div key={i} className='flex text-sm justify-between gap-3 items-center'>
-                        <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>{item.id}</div>
+                        <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>{i+1}</div>
                         <div className='w-36 '>{item.title}</div>
                         <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.program}</div>
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.country}</div>

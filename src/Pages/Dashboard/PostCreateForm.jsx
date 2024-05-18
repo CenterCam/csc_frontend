@@ -110,7 +110,7 @@ export default function PostCreateForm() {
         await createPostMutation(data);
        }
   
-    const { mutateAsync : createPostMutation } = useMutation({
+    const { isPending , mutateAsync : createPostMutation } = useMutation({
     mutationFn : async (state)=>{
         try {
         const response = await axios.post(`${proxy}/api/createPost`,
@@ -337,7 +337,7 @@ export default function PostCreateForm() {
                     </div>
                    
                     <div className='flex flex-col'>
-                        <Button type="submit">Creacte Post</Button>
+                        <Button disabled={isPending} type="submit">Creacte Post</Button>
                     </div>
                 </form>
                 </Form>
