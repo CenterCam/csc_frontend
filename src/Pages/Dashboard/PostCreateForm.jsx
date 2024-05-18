@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { z } from 'zod';
@@ -15,12 +15,51 @@ import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/Components/ui/calendar';
 import { format } from 'date-fns';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { convertDateToLaravelFormat, proxy } from '@/Utils/Utils';
+import { Store } from '@/Utils/Store';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function PostCreateForm() {
 
     const [content , setContent] = useState('');
 
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const {data:countries} = useQuery({ 
+        queryKey: ['countries'], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/countries`,{
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+      });
+
+    const { data:programs} = useQuery({ 
+    queryKey: ['programs'], 
+    queryFn: async ()=>{
+        try {
+            const response = await axios.get(`${proxy}/api/program`,{
+                headers : {
+                    Authorization : `Bearer ${csc_user.token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    });
     const formSchema = z.object({
         title: z.string().min(6,{
             message: " Title must be at least 6 characters.",
@@ -46,25 +85,71 @@ export default function PostCreateForm() {
             required_error: "A deadline is required.",
           }),
       })
-      const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            title :  "",
-            shortDescription :"",
-            country:"",
-            program : "",
-            status :  "",
-            category :"",
-            image_url :"",
-            content :"",
-            deadline : "",
-          },
-      })
+    const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        title :  "",
+        shortDescription :"",
+        country:"",
+        program : "",
+        status :  "",
+        category :"",
+        image_url :"",
+        content :"",
+        deadline : "",
+        },
+    })
 
-      const onSubmit = async (data)=>{
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    const onSubmit = async (data) => {
         data.content = content;
+        data.deadline = convertDateToLaravelFormat(data.deadline);
         console.log(data);
-      }
+        await createPostMutation(data);
+       }
+  
+    const { mutateAsync : createPostMutation } = useMutation({
+    mutationFn : async (state)=>{
+        try {
+        const response = await axios.post(`${proxy}/api/createPost`,
+            {
+                title :  state.title,
+                shortDescription : state.shortDescription,
+                country: state.country,
+                program : state.program,
+                status :  state.status,
+                category : state.category,
+                imgLink : state.image_url,
+                content : state.content,
+                deadline : state.deadline,
+                user_id : csc_user.user.id,
+            }
+            ,
+            {
+            headers : {
+                authorization : `Bearer ${csc_user.token}`
+            }
+            }
+        )  
+            return response.data;
+        } catch (error) {
+        throw error;
+        }
+    },
+    onSuccess : () => {
+        queryClient.invalidateQueries(['posts']);
+        toast.success("Post is Created Successfully");
+        navigate('/dashboard/post')
+        form.reset();
+    },
+    onError : (err) => {
+        toast.error(err.response.data.message);
+    }
+    })
+
+
   return (
     <div>
         <NavbarDashboard />
@@ -112,8 +197,11 @@ export default function PostCreateForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="cambodia">Cambodia</SelectItem>
-                                <SelectItem value="singapor">Singarpore</SelectItem>
+                                {
+                                    countries?.data.map((item,i)=>(
+                                        <SelectItem key={i} value={item.ct_name}>{item.ct_name}</SelectItem>
+                                    ))
+                                }
                             </SelectContent>
                             </Select>
                             <FormMessage />
@@ -133,8 +221,9 @@ export default function PostCreateForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
+                                <SelectItem value="hot">Hot</SelectItem>
+                                <SelectItem value="new">New</SelectItem>
+                                <SelectItem value="normal">Normal</SelectItem>
                             </SelectContent>
                             </Select>
                             <FormMessage />
@@ -154,8 +243,11 @@ export default function PostCreateForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
+                                {
+                                    programs?.programs.map((item,i)=>(
+                                        <SelectItem key={i} value={item.name}>{item.name}</SelectItem>
+                                    ))
+                                }
                             </SelectContent>
                             </Select>
                             <FormMessage />
@@ -175,8 +267,8 @@ export default function PostCreateForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
+                                <SelectItem value="post">Post</SelectItem>
+                                <SelectItem value="scholarship">Scholarship</SelectItem>
                             </SelectContent>
                             </Select>
                             <FormMessage />
