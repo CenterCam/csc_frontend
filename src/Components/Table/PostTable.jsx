@@ -137,7 +137,7 @@ export default function PostTable({users}) {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={()=>alert(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
+                                    <AlertDialogAction onClick={()=>deletePostMutation(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                                 </AlertDialog>

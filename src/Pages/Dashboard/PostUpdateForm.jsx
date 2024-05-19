@@ -116,11 +116,11 @@ export default function PostUpdateForm() {
         category : post?.category,
         image_url : post?.imgLink,
         content : post?.content,
-        deadline : new Date(post?.deadline),
+        deadline : post?.deadline ? new Date(post?.deadline) : post?.deadline,
         },
     })
 
-    const [content , setContent] = useState(post?.content || "");
+    const [content , setContent] = useState(post?.content);
 
     const onSubmit = async (data) => {
         data.content = content;
@@ -244,7 +244,7 @@ export default function PostUpdateForm() {
                                 <SelectContent>
                                     <SelectItem value="hot">Hot</SelectItem>
                                     <SelectItem value="new">New</SelectItem>
-                                    <SelectItem value="normal">Normal</SelectItem>         <SelectItem value="post">Post</SelectItem>
+                                    <SelectItem value="normal">Normal</SelectItem>        
                                 </SelectContent>
                                 </Select>
                                 <FormMessage />
