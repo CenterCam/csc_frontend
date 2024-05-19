@@ -124,10 +124,10 @@ const extensions = [
   }),
 ]
 
-const Tiptap = ({ setDescription }) => {
+const Tiptap = ({ setDescription ,data }) => {
   const editor = useEditor({
     extensions,
-    content: ``,
+    content: data  ,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       setDescription(html);
