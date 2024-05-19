@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { users } from '@/Components/Table/RandomUser';
 import { Store } from '@/Utils/Store';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -20,6 +20,8 @@ import { toast } from 'sonner';
 
 export default function UserCreateForm() {
     const {id} = useParams();
+
+    const navigate = useNavigate();
 
     const formSchema = z.object({
         name: z.string().min(1,{
@@ -100,7 +102,8 @@ export default function UserCreateForm() {
     },
     onSuccess : () => {
         queryClient.invalidateQueries(['user']);
-        toast.success("Country Is Created Successfully");
+        toast.success("User is Updated Successfully");
+        navigate("/dashboard/user");
         form.reset();
     },
     onError : (err) => {

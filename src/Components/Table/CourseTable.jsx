@@ -86,15 +86,15 @@ export default function CourseTable({users}) {
     <>
     <div className='flex justify-between mt-6 flex-wrap gap-3'>
         <div>
-            <Input className="w-full sm:w-96" onChange={(e)=>console.log(e.target.value)} type="text"  placeholder="Search..." />
+            <Input className="w-full sm:w-96" onChange={(e)=>navigate(`/dashboard/course?search=${e.target.value}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${page}`)} type="text"  placeholder="Search..." />
         </div>
-        <Select onValueChange={(value)=>console.log(value)}>
+        <Select onValueChange={(value)=>navigate(`/dashboard/course?search=${search}&&sortBy=${sortBy}&&sortDir=${value}&&page=${page}`)}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort" />
+                <SelectValue placeholder={sortDir == "desc" ? "Newest" : "Oldest"}  />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="newest" >Newest</SelectItem>
-                <SelectItem value="oldest" >Oldest</SelectItem>
+                <SelectItem value="desc" >Newest</SelectItem>
+                <SelectItem value="asc" >Oldest</SelectItem>
             </SelectContent>
         </Select>
     </div>
