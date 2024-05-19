@@ -1,6 +1,6 @@
 import { Edit, Trash, Trash2 } from 'lucide-react'
-import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
     Select,
     SelectContent,
@@ -22,15 +22,65 @@ import {
   
 import { Input } from '../ui/input';
 import MyPagination from '../Pagination/MyPagination';
+import { Store } from '@/Utils/Store'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import { proxy } from '@/Utils/Utils'
+import Loading from '../ui/Loading'
   
 
 export default function CourseTable({users}) {
-    const [selectedValue, setSelectedValue] = useState(null);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const search = queryParams.get("search") || "all";
+    const sortBy = queryParams.get("sortBy") || "created_at";
+    const sortDir = queryParams.get("sortDir") || "desc";
+    const page =  queryParams.get("page") || 1;
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const queryClient = useQueryClient();
+    const {isLoading , isError, data : courses} = useQuery({ 
+        queryKey: ['courses',{search,sortBy,sortDir}], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/courses/${search}/${sortBy}/${sortDir}?page=${page}`,{
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+      });
 
-    const handleSelectionChange = (event) => {
-      setSelectedValue(event.target.value);
-      console.log("Selected value:", event.target.value);
-    };
+    const navigate = useNavigate();
+    const { isPending , mutateAsync : deletePostMutation } = useMutation({
+        mutationFn : async (id)=>{
+          try {
+            const response = await axios.delete(`${proxy}/api/courses/delete/${id}`,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+            }
+            );  
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+        },
+        onSuccess : () => {
+          queryClient.invalidateQueries(['users']);
+          toast.success("Course is deleted successfully");
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
+
+      console.log(courses);
     
   return (
     <>
@@ -59,13 +109,16 @@ export default function CourseTable({users}) {
         </div>
         <div className='mt-3 gap-9 capitalize flex flex-col'>
             {
-                users?.map((item,i)=>(
+                isLoading ? 
+                <Loading />
+                :
+                courses?.data.map((item,i)=>(
                     <div key={i} className='flex text-sm justify-between gap-3 items-center'>
-                        <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>{item.id}</div>
-                        <div className='w-36 '>{item.name}</div>
-                        <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.email}</div>
-                        <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.role}</div>
-                        <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.status}</div>
+                        <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>{i+1}</div>
+                        <div className='w-36 '>{item.title}</div>
+                        <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.type}</div>
+                        <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>${item.price}</div>
+                        <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>%{item.discount}</div>
                         <div className='flex justify-center w-20 gap-1'>
                             <Link to={`/dashboard/course/edit/${item.id}`}><Edit /></Link>
                             <AlertDialog>
@@ -91,7 +144,12 @@ export default function CourseTable({users}) {
         </div>
     </div>
     <div className='w-full flex justify-end mt-3'>
-        <MyPagination endPoint = {"/page=1"} data = {users} />
+        <MyPagination
+            url = {`/dashboard/course/${search}/${sortBy}/${sortDir}`}
+            links = {courses?.links}
+            total = {courses?.total}
+            current = {courses?.to}
+         />
     </div>
     </>
   )
