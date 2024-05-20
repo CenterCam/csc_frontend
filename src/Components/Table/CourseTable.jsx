@@ -80,7 +80,6 @@ export default function CourseTable({users}) {
         }
       })
 
-      console.log(courses);
     
   return (
     <>
@@ -133,7 +132,7 @@ export default function CourseTable({users}) {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={()=>alert(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
+                                    <AlertDialogAction onClick={()=>deletePostMutation(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                                 </AlertDialog>
