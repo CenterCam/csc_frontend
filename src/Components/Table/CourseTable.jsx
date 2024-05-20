@@ -118,7 +118,7 @@ export default function CourseTable({users}) {
                         <div className='w-36 '>{item.title}</div>
                         <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.type}</div>
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>${item.price}</div>
-                        <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>%{item.discount}</div>
+                        <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.discount}%</div>
                         <div className='flex justify-center w-20 gap-1'>
                             <Link to={`/dashboard/course/edit/${item.id}`}><Edit /></Link>
                             <AlertDialog>

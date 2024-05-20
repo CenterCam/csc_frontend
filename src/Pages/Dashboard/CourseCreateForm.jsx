@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { z } from 'zod';
@@ -8,6 +8,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { proxy } from '@/Utils/Utils';
+import { Store } from '@/Utils/Store';
+import { toast } from 'sonner';
 
 
 export default function CourseCreateForm() {
@@ -25,9 +31,12 @@ export default function CourseCreateForm() {
         status: z.string().min(3,{
                 message: " Status must be at Required.",
         }),
-        duration: z.string().min(3,{
-                message: "Duration must be at least 18 characters.",
+        duration: z.string().min(1,{
+                message: "Duration must be Required",
         }),
+        cost:  z.string()
+        .transform(v => parseFloat(v))
+        .refine( v => v > 0 , {message:"Cost Must Be Greater than 0"}),
         price:  z.string()
         .transform(v => parseFloat(v))
         .refine( v => v > 0 , {message:"Price Must Be Greater than 0"}),
@@ -44,6 +53,7 @@ export default function CourseCreateForm() {
             shortDescription :"",
             type:"",
             status : "",
+            cost : "",
             duration :"",
             price :"",
             discount :"",
@@ -51,9 +61,54 @@ export default function CourseCreateForm() {
           },
       })
 
-      const onSubmit = async (data)=>{
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+
+    const onSubmit = async (data) => {
         console.log(data);
-      }
+        await createCourseMutation(data);
+        }
+
+    const { isPending , mutateAsync : createCourseMutation } = useMutation({
+    mutationFn : async (state)=>{
+        try {
+        const response = await axios.post(`${proxy}/api/courses/create`,
+            {
+                title :  state.title,
+                desc : state.shortDescription,
+                image : state.image_url,
+                price : state.price,
+                cost : state.cost,
+                discount : state.discount,
+                duration : state.duration,
+                user_id : csc_user.user.id,
+                type : state.type
+            }
+            ,
+            {
+            headers : {
+                authorization : `Bearer ${csc_user.token}`
+            }
+            }
+        )  
+            return response.data;
+        } catch (error) {
+        throw error;
+        }
+    },
+    onSuccess : () => {
+        queryClient.invalidateQueries(['courses']);
+        toast.success("Course is Created Successfully");
+        navigate('/dashboard/course')
+        form.reset();
+    },
+    onError : (err) => {
+        toast.error(err.response.data.message);
+    }
+    })
   return (
     <div>
         <NavbarDashboard />
@@ -145,12 +200,12 @@ export default function CourseCreateForm() {
                         />
                 <FormField
                     control={form.control}
-                    name="price"
+                    name="cost"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Price</FormLabel>
+                            <FormLabel>Cost</FormLabel>
                             <FormControl>
-                                <Input placeholder="Price" {...field} />
+                                <Input placeholder="Cost" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -164,6 +219,19 @@ export default function CourseCreateForm() {
                             <FormLabel>Discount</FormLabel>
                             <FormControl>
                                 <Input placeholder="Discount"  {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Price" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
