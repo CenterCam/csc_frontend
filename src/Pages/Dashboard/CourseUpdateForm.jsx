@@ -16,12 +16,15 @@ import { Store } from '@/Utils/Store';
 import { toast } from 'sonner';
 import Loading from '@/Components/ui/Loading';
 import VideoDailog from '@/Components/Dailog/VideoDailog';
+import { Edit, Trash } from 'lucide-react';
+import VideoForm from '@/Components/Form/VideoForm';
 
 
 export default function CourseCreateForm() {
 
     const {id} = useParams();
     const [open,setOpen] = useState(false);
+
 
     const {state , dispatch} = useContext(Store);
     const {csc_user} = state;
@@ -32,6 +35,22 @@ export default function CourseCreateForm() {
         queryFn: async ()=>{
             try {
                 const response = await axios.get(`${proxy}/api/courses/${id}}`,{
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+      });
+    
+    const {isLoading : videosLoading , isError : videoError, data:videos} = useQuery({ 
+        queryKey: ['videos'], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/videos/course/${id}}`,{
                     headers : {
                         Authorization : `Bearer ${csc_user.token}`
                     }
@@ -70,31 +89,31 @@ export default function CourseCreateForm() {
         image_url: z.string().url(),
         });
 
-        const form = useForm({
-            resolver: zodResolver(formSchema),
-            values: {
-                title :  course?.title,
-                shortDescription : course?.desc,
-                type: course?.type,
-                cost : course?.cost,
-                discount : course?.discount,
-                price : course?.price,
-                duration : course?.duration,
-                image_url : course?.image,
-                },
-        })
-        const { watch, setValue } = form;
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        values: {
+            title :  course?.title,
+            shortDescription : course?.desc,
+            type: course?.type,
+            cost : course?.cost,
+            discount : course?.discount,
+            price : course?.price,
+            duration : course?.duration,
+            image_url : course?.image,
+            },
+    })
+    const { watch, setValue } = form;
 
-        const cost = watch('cost');
-        const discount = watch('discount');
-    
-        useEffect(() => {
-            if (cost && discount) {
-                const discountedPrice = cost - (cost * discount) / 100;
-                setValue('price',  discountedPrice.toFixed(2).toString());
-            }
-        }, [cost, discount, setValue]);
-    
+    const cost = watch('cost');
+    const discount = watch('discount');
+
+    useEffect(() => {
+        if (cost && discount) {
+            const discountedPrice = cost - (cost * discount) / 100;
+            setValue('price',  discountedPrice.toFixed(2).toString());
+        }
+    }, [cost, discount, setValue]);
+
 
     const onSubmit = async (data) => {
         console.log(data);
@@ -135,6 +154,31 @@ export default function CourseCreateForm() {
             toast.error(err.response.data.message);
         }
     })
+
+    const { isPending : deletePending , mutateAsync : deleteVideoMutation } = useMutation({
+        mutationFn : async (id)=>{
+          try {
+            const response = await axios.delete(`${proxy}/api/videos/delete/${id}`,
+              {
+                headers : {
+                  authorization : `Bearer ${csc_user.token}`
+              }
+            }
+            );  
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+        },
+        onSuccess : (res) => {
+          queryClient.invalidateQueries(['videos']);
+          toast.success("Video is deleted successfully");
+        },
+        onError : (err) => {
+          toast.error(err.response.data.message);
+        }
+      })
+
   return (
     <div>
         <NavbarDashboard />
@@ -273,6 +317,7 @@ export default function CourseCreateForm() {
                         <Button  onClick={ ()=>setOpen(true) }>ADD</Button>
                         <VideoDailog isOpen={open} setOpen={setOpen} />
                     </div>
+                    <VideoForm videos={videos} />
                 </div>
             </div>
         </div>

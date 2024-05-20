@@ -17,11 +17,10 @@ import axios from 'axios'
 import { proxy } from '@/Utils/Utils'
 import { Store } from '@/Utils/Store'
 import { toast } from 'sonner'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { useParams } from 'react-router-dom'
   
 
-export default function VideoDailog({isOpen,setOpen}) {
+export default function VideoDailog({isOpen,setOpen,video}) {
 
   const {state , dispatch} = useContext(Store);
   const {csc_user} = state;
@@ -45,58 +44,95 @@ export default function VideoDailog({isOpen,setOpen}) {
   const form = useForm({
       resolver: zodResolver(formSchema),
       defaultValues: {
-          title: "",
-          duration : "",
-          video_link : "",
-          description:"",
+          title: video?.v_title || "",
+          duration : video?.v_duration.toString() || "",
+          video_link : video?.v_link || "",
+          description: video?.v_description || "",
         },
     })
 
-    const onSubmit = async (data) => {
-        console.log(data);
-        await createVideoMutation(data);
-        setOpen(false);
-     }
 
-    const { mutateAsync : createVideoMutation } = useMutation({
-      mutationFn : async (state)=>{
-        try {
-          const response = await axios.post(`${proxy}/api/videos/create`,
-            {
-                v_title : state.title,
-                v_duration : state.duration,
-                v_link : state.video_link,
-                v_description : state.description,
-                course_id : id,
-                user_id : csc_user.user.id,
-            }
-            ,
-            {
-              headers : {
-                authorization : `Bearer ${csc_user.token}`
-            }
-            }
-          )  
-        } catch (error) {
-          throw error;
-        }
-      },
-      onSuccess : () => {
-        queryClient.invalidateQueries(['vidoes']);
-        toast.success("Country Is Created Successfully");
-        setOpen(false);
-        form.reset();
-      },
-      onError : (err) => {
-        toast.error(err.response.data.message);
+  const onSubmit = async (data) => {
+    if (video) {
+      await updateVideoMutation(data);
+    }else{
+      await createVideoMutation(data);
+    }
+    }
+
+  const { isPending : createPending , mutateAsync : createVideoMutation } = useMutation({
+    mutationFn : async (state)=>{
+      try {
+        const response = await axios.post(`${proxy}/api/videos/create`,
+          {
+              v_title : state.title,
+              v_duration : state.duration,
+              v_link : state.video_link,
+              v_description : state.description,
+              course_id : id,
+              user_id : csc_user.user.id,
+          }
+          ,
+          {
+            headers : {
+              authorization : `Bearer ${csc_user.token}`
+          }
+          }
+        )  
+      } catch (error) {
+        throw error;
       }
-    })
+    },
+    onSuccess : () => {
+      queryClient.invalidateQueries(['videos']);
+      toast.success("Video is Created Successfully");
+      setOpen(false);
+      form.reset();
+    },
+    onError : (err) => {
+      toast.error(err.response.data.message);
+    }
+  })
+
+  const { isPending : updatePending , mutateAsync : updateVideoMutation } = useMutation({
+    mutationFn : async (state)=>{
+      try {
+        const response = await axios.put(`${proxy}/api/videos/update/${video?.id}`,
+          {
+              v_title : state.title,
+              v_duration : state.duration,
+              v_link : state.video_link,
+              v_description : state.description,
+              course_id : id,
+              user_id : csc_user.user.id,
+          }
+          ,
+          {
+            headers : {
+              authorization : `Bearer ${csc_user.token}`
+          }
+          }
+        )  
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess : () => {
+      queryClient.invalidateQueries(['videos']);
+      toast.success("Video is Updated Successfully");
+      setOpen(false);
+      form.reset();
+    },
+    onError : (err) => {
+      toast.error(err.response.data.message);
+    }
+  })
   return (
     <>
         <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent>
                 <DialogHeader>
-                <DialogTitle>Create Video</DialogTitle>
+                <DialogTitle>{video ? "Update Video" : "Create Video"}</DialogTitle>
                 <Form {...form} className="space-y-8 flex flex-col mt-9">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                   <FormField
@@ -152,7 +188,7 @@ export default function VideoDailog({isOpen,setOpen}) {
                       )}
                       />
                       <div className='flex flex-col'>
-                          <Button type="submit">Submit</Button>
+                          <Button disabled={createPending || updatePending} type="submit">{video ? "Update" : "Submit"}</Button>
                       </div>
                   </form>
                   </Form>
