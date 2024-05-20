@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { z } from 'zod';
@@ -8,9 +8,39 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { proxy } from '@/Utils/Utils';
+import { Store } from '@/Utils/Store';
+import { toast } from 'sonner';
+import Loading from '@/Components/ui/Loading';
 
 
 export default function CourseCreateForm() {
+
+    const {id} = useParams();
+
+    const {state , dispatch} = useContext(Store);
+    const {csc_user} = state;
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const {isLoading , isError, data:course} = useQuery({ 
+        queryKey: ['course',{id}], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/courses/${id}}`,{
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+      });
+
 
     const formSchema = z.object({
         title: z.string().min(6,{
@@ -22,12 +52,12 @@ export default function CourseCreateForm() {
         type: z.string().min(3,{
                 message: " Type must be Required.",
         }),
-        status: z.string().min(3,{
-                message: " Status must be at Required.",
+        duration: z.string().min(1,{
+                message: "Duration must be Required",
         }),
-        duration: z.string().min(3,{
-                message: "Duration must be at least 18 characters.",
-        }),
+        cost:  z.string()
+        .transform(v => parseFloat(v))
+        .refine( v => v > 0 , {message:"Cost Must Be Greater than 0"}),
         price:  z.string()
         .transform(v => parseFloat(v))
         .refine( v => v > 0 , {message:"Price Must Be Greater than 0"}),
@@ -36,31 +66,84 @@ export default function CourseCreateForm() {
         .refine( v => v >= 0 && v <= 100 , {message:"Discount Must Be From 0 to 100"}),
         
         image_url: z.string().url(),
-      })
-      const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            title :  "",
-            shortDescription :"",
-            type:"",
-            status : "",
-            duration :"",
-            price :"",
-            discount :"",
-            image_url :"",
-          },
-      })
+        });
 
-      const onSubmit = async (data)=>{
+        const form = useForm({
+            resolver: zodResolver(formSchema),
+            values: {
+                title :  course?.title,
+                shortDescription : course?.desc,
+                type: course?.type,
+                cost : course?.cost,
+                discount : course?.discount,
+                price : course?.price,
+                duration : course?.duration,
+                image_url : course?.image,
+                },
+        })
+        const { watch, setValue } = form;
+
+        const cost = watch('cost');
+        const discount = watch('discount');
+    
+        useEffect(() => {
+            if (cost && discount) {
+                const discountedPrice = cost - (cost * discount) / 100;
+                setValue('price',  discountedPrice.toFixed(2).toString());
+            }
+        }, [cost, discount, setValue]);
+    
+
+    const onSubmit = async (data) => {
         console.log(data);
-      }
+        await updateCourseMutation(data);
+    }
+
+    const { isPending , mutateAsync : updateCourseMutation } = useMutation({
+        mutationFn : async (state)=>{
+            try {
+            const response = await axios.put(`${proxy}/api/courses/update/${id}`,
+                {
+                    title :  state.title,
+                    desc : state.shortDescription,
+                    type: state.type,
+                    cost : state.cost,
+                    duration : state.duration,
+                    price : state.price,
+                    discount : state.discount,
+                    image: state.image_url,
+                }
+                ,
+                {
+                headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                }
+                }
+            )  
+                return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : (res) => {
+            queryClient.invalidateQueries(['course']);
+            toast.success(res.message);
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+    })
   return (
     <div>
         <NavbarDashboard />
         <div className='p-3 w-full flex justify-center items-center'>
             <div className=" w-full md:w-1/2 ">
                 <p className="my-3 font-bold text-black text-3xl" >Update Course</p>
-                <Form {...form} className="space-y-8 flex flex-col">
+                {
+                    isLoading ? 
+                    <Loading />
+                    :
+                    <Form {...form} className="space-y-8 flex flex-col">
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                     control={form.control}
@@ -97,33 +180,13 @@ export default function CourseCreateForm() {
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                                 <SelectTrigger>
-                                <SelectValue placeholder="Select a verified type to display" />
+                                <SelectValue placeholder={course?.type} />
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="Free">Free</SelectItem>
-                                <SelectItem value="Paid">Paid</SelectItem>
-                            </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                <SelectValue placeholder="Select a verified status to display" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
+                                <SelectItem value="free">Free</SelectItem>
+                                <SelectItem value="paid">Paid</SelectItem>
+                                <SelectItem value="disabled">Disabled</SelectItem>
                             </SelectContent>
                             </Select>
                             <FormMessage />
@@ -145,12 +208,12 @@ export default function CourseCreateForm() {
                         />
                 <FormField
                     control={form.control}
-                    name="price"
+                    name="cost"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Price</FormLabel>
+                            <FormLabel>Cost</FormLabel>
                             <FormControl>
-                                <Input placeholder="Price" {...field} />
+                                <Input placeholder="Cost" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -171,6 +234,19 @@ export default function CourseCreateForm() {
                     />
                 <FormField
                     control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <FormControl>
+                                <Input disabled placeholder="Price" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                <FormField
+                    control={form.control}
                     name="image_url"
                     render={({ field }) => (
                         <FormItem>
@@ -184,10 +260,11 @@ export default function CourseCreateForm() {
                     />
                                 
                     <div className='flex flex-col'>
-                        <Button type="submit">Update Course</Button>
+                        <Button type="submit">Creacte Course</Button>
                     </div>
                 </form>
                 </Form>
+                }
             </div>
         </div>
         <Footer />

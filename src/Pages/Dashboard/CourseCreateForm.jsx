@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { z } from 'zod';
@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 
 export default function CourseCreateForm() {
+
 
     const formSchema = z.object({
         title: z.string().min(6,{
@@ -60,6 +61,17 @@ export default function CourseCreateForm() {
             image_url :"",
           },
       })
+      const { watch, setValue } = form;
+
+      const cost = watch('cost');
+      const discount = watch('discount');
+  
+      useEffect(() => {
+          if (cost && discount) {
+              const discountedPrice = cost - (cost * discount) / 100;
+              setValue('price', discountedPrice.toFixed(2));
+          }
+      }, [cost, discount, setValue]);
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -68,7 +80,6 @@ export default function CourseCreateForm() {
     const {csc_user} = state;
 
     const onSubmit = async (data) => {
-        console.log(data);
         await createCourseMutation(data);
         }
 
@@ -156,8 +167,9 @@ export default function CourseCreateForm() {
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="Free">Free</SelectItem>
-                                <SelectItem value="Paid">Paid</SelectItem>
+                                <SelectItem value="free">Free</SelectItem>
+                                <SelectItem value="paid">Paid</SelectItem>
+                                <SelectItem value="disabled">Disabled</SelectItem>
                             </SelectContent>
                             </Select>
                             <FormMessage />
@@ -231,7 +243,7 @@ export default function CourseCreateForm() {
                         <FormItem>
                             <FormLabel>Price</FormLabel>
                             <FormControl>
-                                <Input placeholder="Price" {...field} />
+                                <Input disabled placeholder="Price" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
