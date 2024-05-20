@@ -15,11 +15,13 @@ import { proxy } from '@/Utils/Utils';
 import { Store } from '@/Utils/Store';
 import { toast } from 'sonner';
 import Loading from '@/Components/ui/Loading';
+import VideoDailog from '@/Components/Dailog/VideoDailog';
 
 
 export default function CourseCreateForm() {
 
     const {id} = useParams();
+    const [open,setOpen] = useState(false);
 
     const {state , dispatch} = useContext(Store);
     const {csc_user} = state;
@@ -265,6 +267,13 @@ export default function CourseCreateForm() {
                 </form>
                 </Form>
                 }
+                <div className=" w-full mt-9 ">
+                    <div className='flex gap-6 items-center'>
+                        <p className="my-3 font-bold text-black text-3xl" >Videos </p>
+                        <Button  onClick={ ()=>setOpen(true) }>ADD</Button>
+                        <VideoDailog isOpen={open} setOpen={setOpen} />
+                    </div>
+                </div>
             </div>
         </div>
         <Footer />
