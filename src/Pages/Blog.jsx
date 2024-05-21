@@ -3,13 +3,14 @@ import Navbar from '../Components/Frontend-Navbar/Navbar'
 import Footer from '../Components/Frontend-Footer/Footer'
 import Card from '../Components/Card/Card'
 import SmallCard from '../Components/Card/SmallCard'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Store } from '@/Utils/Store'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { proxy } from '@/Utils/Utils'
 import Loading from '@/Components/ui/Loading'
 import MyPagination from '@/Components/Pagination/MyPagination'
+import { Input } from '@/Components/ui/input'
 
 export default function Blog() {
   const location = useLocation();
@@ -20,6 +21,7 @@ export default function Blog() {
   const page =  queryParams.get("page") || 1;
   const {state , dispatch} = useContext(Store);
   const {csc_user} = state;
+  const navigate = useNavigate();
   const {isLoading , isError, data:posts} = useQuery({ 
       queryKey: ['posts',{search,sortBy,sortDir}], 
       queryFn: async ()=>{
@@ -36,13 +38,17 @@ export default function Blog() {
       }
     });
 
-  console.log(posts);
   return (
     <div>
       <Navbar page={"/blog"} />
       <section className="recent border-b  p-3">
-        <div className="font-bold text-lg my-6 border-b">Recent Post</div>
-        <div className=" columns-1 md:columns-2 lg:columns-3 space-y-9 px-6 md:px-24 lg:px-36 w-full">
+        <div className='flex items-center gap-3 my-6 border-b pb-6'>
+          <div className="font-bold text-lg ">Recent Post</div>
+          <div>
+            <Input className="w-full sm:w-96" onChange={(e)=>navigate(`/blog?search=${e.target.value}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${page}`)} type="text"  placeholder="Search..." />
+          </div>
+        </div>
+        <div className=" columns-1 md:columns-2 lg:columns-3 space-y-9 px-6 md:px-24 lg:px-60 w-full">
           {
             isLoading ? 
             <Loading />
@@ -53,7 +59,7 @@ export default function Blog() {
           }
         </div>
       </section>
-      <div className='w-full flex justify-end mt-3'>
+      <div className='w-full flex justify-end mt-3 px-3'>
           <MyPagination
               url = {`/blog?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}`}
               links = {posts?.links}

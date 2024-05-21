@@ -37,9 +37,6 @@ export default function Navbar({page}) {
                         <div className={page == "/blog" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                             <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>Blog</Link>
                         </div>
-                        <div className={page == "/scholarship" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
-                            <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Scholarship</Link>
-                        </div>
                         <div className={page == "/course" ? 'border-b-4 border-orange-500 rounded-lg' : ""}>
                             <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
                         </div>
@@ -73,9 +70,6 @@ export default function Navbar({page}) {
                             </li>
                             <li>
                                 <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>Blog</Link>
-                            </li>
-                            <li>
-                                <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Scholarship</Link>
                             </li>
                             <li>
                                 <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>

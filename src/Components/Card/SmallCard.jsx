@@ -18,9 +18,8 @@ export default function SmallCard({item}) {
             }
         }
     },[])
-    console.log(<myref className="current innerHTML"></myref>);
   return (
-    <div className=" hover:scale-105 h-[480px] transition overflow-hidden">
+    <div className=" h-[480px] transition overflow-hidden">
         <div>
             <img
             src={item.imgLink}
