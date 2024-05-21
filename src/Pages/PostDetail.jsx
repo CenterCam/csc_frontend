@@ -69,7 +69,7 @@ export default function PostDetail() {
                                     <p>Deadline : <span>{post?.deadline.slice(0,10)}</span></p>
                                 </div>
                                 <p className="my-6 capitalize">{post?.shortDescription}</p>
-                                <div className="remove-all capitalize">
+                                <div className="remove-all capitalize px-9">
                                     <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                                 </div>
                             </div>

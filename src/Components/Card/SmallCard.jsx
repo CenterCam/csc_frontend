@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom';
 
-export default function SmallCard() {
+export default function SmallCard({item}) {
     const myref = useRef();
     useEffect(()=>{
         if (myref.current) {
@@ -19,27 +20,26 @@ export default function SmallCard() {
     },[])
     console.log(<myref className="current innerHTML"></myref>);
   return (
-    <div className=" m-6 w-80 hover:scale-105 transition">
+    <div className=" hover:scale-105 h-[480px] transition overflow-hidden">
         <div>
             <img
-            src="{{url('/frontendAssets/posts/'.$post->imgLink)}}"
+            src={item.imgLink}
             alt="post-img"
-            className="h-80 object-cover  "
+            className="h-96 w-full object-cover  "
             />
         </div>
         <div class="p-3"  >
             <div className="flex space-x-3 items-center ">
-                <div ref={myref} id="status" className=" w-fit p-2 rounded-sm font-bold text-white text-xs ">On Going</div>
-                <div className="text-xs text-black font-bold">Deadline : 2024.05.18</div>
+                <div className="text-xs text-black font-bold">Deadline : {item.deadline.slice(0,10)}</div>
             </div>
-            <a href="{{route('page.postDetail',$post)}}" class="font-bold text-lg hover:underline text-black">
+            <Link to={`/postDetail/${item.id}`} class="font-bold text-lg hover:underline text-black">
                 <div>
                     <p class=" line-clamp-1">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis ullam ut natus, enim magnam maiores ducimus! Eligendi inventore adipisci numquam repudiandae sequi reiciendis quod dolore harum officia, rem quaerat placeat?
+                        {item.title}
                     </p>
-                    <p class="text-xs line-clamp-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo eaque explicabo fuga, illum suscipit iste voluptate soluta perferendis nam harum sequi voluptates quis odit modi corporis repellendus excepturi deleniti! Cumque.</p>
+                    <p class="text-sm line-clamp-2">{item.shortDescription}</p>
                 </div>
-            </a>
+            </Link>
         </div>
     </div>
   )
