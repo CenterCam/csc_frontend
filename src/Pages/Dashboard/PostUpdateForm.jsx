@@ -66,7 +66,7 @@ export default function PostUpdateForm() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const {isLoading , isError, data:post} = useQuery({ 
-        queryKey: ['post'], 
+        queryKey: ['post',{id}], 
         queryFn: async ()=>{
             try {
                 const response = await axios.get(`${proxy}/api/getPost/${id}}`,{

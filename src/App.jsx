@@ -40,7 +40,7 @@ return (
         <Route path="/contact" element={<Contact />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/postDetail" element={<PostDetail />} />
+        <Route path="/postDetail/:id" element={<PostDetail />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/courseDetail" element={<CourseDetail />} />
           <Route path='/dashboard' element={<Dashboard />} />

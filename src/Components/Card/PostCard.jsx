@@ -1,33 +1,34 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default function PostCard() {
+export default function PostCard({item}) {
   return (
-    <div className="max-w-sm w-72 bg-white border border-gray-200 rounded-lg shadow  mx-6 my-6"> 
-    <a href="/">
+    <div className="max-w-sm w-72 bg-white border border-gray-200 rounded-lg shadow  mx-6 my-6 capitalize"> 
+    <Link to={`/postDetail/${item.id}`}>
       <img
         className="rounded-t-lg h-72 w-full object-cover"
-        src="/"
+        src={item.imgLink}
         alt=""
       />
-    </a>
+    </Link>
     <div className="p-5">
       <a href="/">
         <p className="mb-2 text-lg font-bold tracking-tight hover:underline text-black line-clamp-2">
-          Title
+          {item.title}
         </p>
       </a>
       <p className="mb-3 font-normal text-sm text-gray-700 dark:text-gray-400 line-clamp-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+        {item.shortDescription} 
       </p>
       <div className=" mb-3">
         <p className=" font-normal text-sm text-gray-700 dark:text-gray-400 ">
-            Cambodia
+           {item.country}
         </p>
         <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
-          PHP
+          {item.program}
         </p>
         <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
-            Deadline : <span>2012-05-12</span>
+            Deadline : <span>{item.deadline.slice(0,10)}</span>
         </p>
       </div>
       <a
