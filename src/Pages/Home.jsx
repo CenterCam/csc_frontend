@@ -12,7 +12,6 @@ import { proxy } from '@/Utils/Utils'
 import Loading from '@/Components/ui/Loading'
 
 export default function Home() {
-  const [items,setItem]= useState(["item1","item2","item3","item4"])
   const {state , dispatch} = useContext(Store);
   const {csc_user} = state;
   const {isLoading , isError, data:homepageData} = useQuery({ 
@@ -30,7 +29,6 @@ export default function Home() {
           }
       }
     });
-    console.log(homepageData);
   return (
     <>
       {

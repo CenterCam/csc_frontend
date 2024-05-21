@@ -64,8 +64,8 @@ export default function PostCreateForm() {
         title: z.string().min(6,{
             message: " Title must be at least 6 characters.",
           }),
-          shortDescription: z.string().min(18,{
-            message: " Short Description must be at least 18 characters.",
+          shortDescription: z.string().min(60,{
+            message: " Short Description must be at least 60 characters.",
           }),
         country: z.string().min(3,{
             message: " Country must be at least 3 characters.",
