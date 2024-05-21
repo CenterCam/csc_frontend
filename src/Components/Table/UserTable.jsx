@@ -148,7 +148,7 @@ export default function UserTable() {
     </div>
     <div className='w-full flex justify-end mt-3'>
         <MyPagination 
-            url = {`/dashboard/user/${search}/${sortBy}/${sortDir}`}
+            url = {`/dashboard/user/?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}`}
             links = {data?.links}
             total = {data?.total}
             current = {data?.to}

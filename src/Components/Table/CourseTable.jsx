@@ -144,7 +144,7 @@ export default function CourseTable({users}) {
     </div>
     <div className='w-full flex justify-end mt-3'>
         <MyPagination
-            url = {`/dashboard/course/${search}/${sortBy}/${sortDir}`}
+            url = {`/dashboard/course?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}`}
             links = {courses?.links}
             total = {courses?.total}
             current = {courses?.to}

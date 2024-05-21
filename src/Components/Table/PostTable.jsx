@@ -149,7 +149,7 @@ export default function PostTable({users}) {
     </div>
     <div className='w-full flex justify-end mt-3'>
         <MyPagination
-            url = {`/dashboard/post/${search}/${sortBy}/${sortDir}`}
+            url = {`/dashboard/post?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}`}
             links = {data?.links}
             total = {data?.total}
             current = {data?.to}

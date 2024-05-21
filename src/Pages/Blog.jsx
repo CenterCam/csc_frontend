@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { proxy } from '@/Utils/Utils'
 import Loading from '@/Components/ui/Loading'
+import MyPagination from '@/Components/Pagination/MyPagination'
 
 export default function Blog() {
   const location = useLocation();
@@ -52,7 +53,14 @@ export default function Blog() {
           }
         </div>
       </section>
-      <div className=" p-3 flex justify-end text-orange-600 font-bold "><a href="search/seemore/posts">SEE MORE</a></div>
+      <div className='w-full flex justify-end mt-3'>
+          <MyPagination
+              url = {`/blog?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}`}
+              links = {posts?.links}
+              total = {posts?.total}
+              current = {posts?.to}
+          />
+      </div>
       <Footer />
     </div>
   )

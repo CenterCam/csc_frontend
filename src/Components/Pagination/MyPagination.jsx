@@ -11,7 +11,7 @@ import {
 import React from 'react'
 import { useLocation } from "react-router-dom";
 
-export default function MyPagination({links,total,current}) {
+export default function MyPagination({links,total,current,url}) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const search = queryParams.get("search") || "all";
@@ -30,19 +30,19 @@ export default function MyPagination({links,total,current}) {
         <Pagination>
             <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href={`/dashboard/user?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${1}`} />
+                  <PaginationPrevious href={`${url}&&page=${1}`} />
                 </PaginationItem>
                 <PaginationItem>
                 {
                   links?.map((item, i) => (
                     i > 0 && i < links.length-1 && ( 
-                      <PaginationLink key={i}  href={`/dashboard/user?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${i.toFixed(0)}`} >{item.label}</PaginationLink>
+                      <PaginationLink key={i}  href={`${url}&&page=${i.toFixed(0)}`} >{item.label}</PaginationLink>
                     )
                   ))
                 }
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href={`/dashboard/user?search=${search}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${links?.length-2}`}  />
+                  <PaginationNext href={`${url}&&page=${links?.length-2}`}  />
                 </PaginationItem>
             </PaginationContent>
         </Pagination>
