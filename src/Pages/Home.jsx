@@ -18,11 +18,7 @@ export default function Home() {
       queryKey: ['homepageData'], 
       queryFn: async ()=>{
           try {
-              const response = await axios.get(`${proxy}/api/homepage/data`,{
-                  headers : {
-                      Authorization : `Bearer ${csc_user.token}`
-                  }
-              });
+              const response = await axios.get(`${proxy}/api/homepage/data`);
               return response.data;
           } catch (error) {
               throw error;

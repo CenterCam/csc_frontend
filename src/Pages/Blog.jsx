@@ -26,11 +26,7 @@ export default function Blog() {
       queryKey: ['posts',{search,sortBy,sortDir}], 
       queryFn: async ()=>{
           try {
-              const response = await axios.get(`${proxy}/api/getPost/${search}/${sortBy}/${sortDir}?page=${page}`,{
-                  headers : {
-                      Authorization : `Bearer ${csc_user.token}`
-                  }
-              });
+              const response = await axios.get(`${proxy}/api/blog/${search}/${sortBy}/${sortDir}?page=${page}`);
               return response.data;
           } catch (error) {
               throw error;

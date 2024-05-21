@@ -16,11 +16,7 @@ export default function PostDetail() {
         queryKey: ['post',{id}], 
         queryFn: async ()=>{
             try {
-                const response = await axios.get(`${proxy}/api/getPost/${id}`,{
-                    headers : {
-                        Authorization : `Bearer ${csc_user.token}`
-                    }
-                });
+                const response = await axios.get(`${proxy}/api/post/${id}`);
                 return response.data;
             } catch (error) {
                 throw error;
@@ -31,11 +27,7 @@ export default function PostDetail() {
         queryKey: ['postsNotIn'], 
         queryFn: async ()=>{
             try {
-                const response = await axios.get(`${proxy}/api/getPost/notIn/${id}`,{
-                    headers : {
-                        Authorization : `Bearer ${csc_user.token}`
-                    }
-                });
+                const response = await axios.get(`${proxy}/api/post/notIn/${id}`);
                 return response.data;
             } catch (error) {
                 throw error;
