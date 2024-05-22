@@ -13,7 +13,7 @@ export default function CourseCard({item}) {
             />
         </div>
         <div className='my-1 p-3'>
-            <Link to="" className='font-bold text-lg line-clamp-2 cursor-pointer hover:underline capitalize'>
+            <Link to={`/video/${item.id}`} className='font-bold text-lg line-clamp-2 cursor-pointer hover:underline capitalize'>
               {item.title}
             </Link>
             <p className="my-1 line-clamp-2 capitalize">

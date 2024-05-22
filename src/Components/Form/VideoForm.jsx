@@ -6,10 +6,20 @@ import { Edit, Trash } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { toast } from 'sonner';
 import VideoDailog from '../Dailog/VideoDailog';
+import { useNavigate, useParams } from 'react-router-dom';
+import VideoUpdateDailog from '../Dailog/VideoUpdateDailog';
 
 export default function VideoForm({videos}) {
 
     const [open,setOpen] = useState(false);
+
+    const navigate = useNavigate();
+
+    const {id} = useParams();
+
+    
+    const queryParams = new URLSearchParams(location.search);
+    const videoId = queryParams.get("video") || null;
 
     const {state , dispatch} = useContext(Store);
     const {csc_user} = state;
@@ -37,6 +47,11 @@ export default function VideoForm({videos}) {
           toast.error(err.response.data.message);
         }
       })
+
+    const video =videos?.filter((item)=>item.id==videoId)[0] || null;
+
+    console.log(video);
+
   return (
     <div>
     <div className='mt-3'>
@@ -59,10 +74,13 @@ export default function VideoForm({videos}) {
                     {item.v_duration} mn
                     </div>
                     <div  className='w-16 cursor-pointer flex items-center gap-3 justify-center'>
-                        <button onClick={()=>setOpen(!open)}>
+                        <button onClick={()=>{
+                          setOpen(!open);
+                          navigate(`/dashboard/course/edit/${id}?video=${item.id}`)
+                          }}>
                             <Edit />      
                         </button>
-                        <VideoDailog isOpen={open} setOpen={setOpen} video={item} />
+                        <VideoUpdateDailog isOpen={open} setOpen={setOpen}  />
                         <button disabled={deletePending} onClick={(e)=>deleteVideoMutation(item.id)}>
                             <Trash />
                         </button>

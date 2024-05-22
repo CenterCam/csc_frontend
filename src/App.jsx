@@ -25,6 +25,7 @@ import UserCreateEditForm from './Pages/Dashboard/UserCreateForm'
 import Cookies from 'js-cookie'
 import { useContext } from 'react'
 import { Store } from './Utils/Store'
+import VideoPage from './Pages/VideoPage'
 
 function App() {
   const queryClient = new QueryClient()
@@ -42,6 +43,7 @@ return (
         <Route path="/signup" element={<Signup />} />
         <Route path="/postDetail/:id" element={<PostDetail />} />
         <Route element={<ProtectedRoutes />}>
+          <Route path="/video/:id" element={<VideoPage />} />
           <Route path="/courseDetail" element={<CourseDetail />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/dashboard/user' element={<AdminUser />} />
