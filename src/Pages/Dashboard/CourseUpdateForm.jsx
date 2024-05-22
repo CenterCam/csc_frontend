@@ -67,8 +67,8 @@ export default function CourseCreateForm() {
         title: z.string().min(6,{
                 message: "Title must be at least 6 characters.",
         }),
-        shortDescription: z.string().min(18,{
-                message: "Description must be at least 18 characters.",
+        shortDescription: z.string().min(150,{
+                message: "Description must be at least 150 characters.",
         }),
         type: z.string().min(3,{
                 message: " Type must be Required.",
