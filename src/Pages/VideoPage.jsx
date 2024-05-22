@@ -42,7 +42,7 @@ export default function VideoPage() {
     });
     const videoId = queryParams.get("video") ? queryParams.get("video") : ( videos ? videos[0].id : "") ;
 
-    console.log(course);
+    console.log(videos?.filter((item)=>item.id==videoId)[0].v_link);
   return (
     <div>
         <Navbar />

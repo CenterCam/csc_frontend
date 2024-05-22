@@ -306,7 +306,7 @@ export default function CourseCreateForm() {
                     />
                                 
                     <div className='flex flex-col'>
-                        <Button type="submit">Creacte Course</Button>
+                        <Button type="submit">Update Course</Button>
                     </div>
                 </form>
                 </Form>
