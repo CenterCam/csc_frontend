@@ -26,6 +26,7 @@ import Cookies from 'js-cookie'
 import { useContext } from 'react'
 import { Store } from './Utils/Store'
 import VideoPage from './Pages/VideoPage'
+import NotFoundPage from './Pages/NotFoundPage'
 
 function App() {
   const queryClient = new QueryClient()
@@ -56,6 +57,7 @@ return (
           <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
           <Route path='/dashboard/course/edit/:id' element={<CourseUpdateForm />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} /> 
       </Routes>
     </BrowserRouter>
     <ReactQueryDevtools initialIsOpen={false} />
