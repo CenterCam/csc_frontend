@@ -27,6 +27,7 @@ import { useContext } from 'react'
 import { Store } from './Utils/Store'
 import VideoPage from './Pages/VideoPage'
 import NotFoundPage from './Pages/NotFoundPage'
+import YourClass from './Pages/YourClass'
 
 function App() {
   const queryClient = new QueryClient()
@@ -42,6 +43,7 @@ return (
         <Route path="/contact" element={<Contact />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/your/class" element={<YourClass />} />
         <Route path="/postDetail/:id" element={<PostDetail />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/video/:id" element={<VideoPage />} />

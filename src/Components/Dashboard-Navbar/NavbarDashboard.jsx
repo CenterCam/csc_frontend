@@ -2,6 +2,7 @@ import { Store } from '@/Utils/Store';
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button';
+import { LogOut } from 'lucide-react';
 
 export default function NavbarDashboard({page}) {
   const [menu, setMenu] = useState(false);
@@ -53,7 +54,9 @@ export default function NavbarDashboard({page}) {
 
             {
                 csc_user != null ? 
-                <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Log out</button>
+                <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">
+                    <LogOut />
+                </button>
                 :
                 <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
             }

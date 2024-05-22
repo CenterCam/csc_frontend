@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button';
 import { Store } from '@/Utils/Store';
+import { Book, LogOut } from 'lucide-react';
 
 export default function Navbar({page}) {
   const navigate = useNavigate();
@@ -46,14 +47,14 @@ export default function Navbar({page}) {
                     </div>
                 </div>
             </div>
-            <div className='flex space-x-3 relative'>
-                {
-                    csc_user?.user.role == 'admin' && <Link to="/dashboard"><Button>Dashboard</Button></Link>
-                }
+            <div className='flex space-x-3 relative items-center'>
+                <Link to={`/your/class`}>
+                    <Book />
+                </Link>
 
                 {
                     csc_user != null ? 
-                    <button onClick={logout}   className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Log out</button>
+                    <button onClick={logout}><LogOut /></button>
                     :
                     <Link to="/signin" type="button"  className="text-white bg-orange-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center">Login</Link>
                 }
@@ -61,6 +62,9 @@ export default function Navbar({page}) {
                 <div className='xl:hidden cursor-pointer hover:scale-110 transition'  onClick={()=>setMenu(!menu)}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 6h18M3 12h18M3 18h18"/></svg>
                 </div>
+                {
+                    csc_user?.user.role == 'admin' && <Link to="/dashboard"><Button>Dashboard</Button></Link>
+                }
                 {
                     menu && 
                     <div className='xl:hidden absolute right-0 top-16   '>
