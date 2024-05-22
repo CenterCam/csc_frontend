@@ -178,33 +178,33 @@ export default function UserCreateForm() {
         }
         })
 
-        const userLeaveCourse = async (course_id)=>{
-            await deleteCourseFromUser(course_id);
-        }
+    const userLeaveCourse = async (course_id)=>{
+        await deleteCourseFromUser(course_id);
+    }
 
-        const { isPending : pending3 , mutateAsync : deleteCourseFromUser } = useMutation({
-            mutationFn : async (id)=>{
-                console.log(id);
-                try {
-                const response = await axios.delete(`${proxy}/api/courses/delete/user/${id}`,
-                {
-                    headers : {
-                        Authorization : `Bearer ${csc_user.token}`
-                    }
-                });
-                return response.data;
-                } catch (error) {
-                throw error;
+    const { isPending : pending3 , mutateAsync : deleteCourseFromUser } = useMutation({
+        mutationFn : async (id)=>{
+            console.log(id);
+            try {
+            const response = await axios.delete(`${proxy}/api/courses/delete/user/${id}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${csc_user.token}`
                 }
-            },
-            onSuccess : () => {
-                queryClient.invalidateQueries(['user']);
-                toast.success("Leave course Successfully");
-            },
-            onError : (err) => {
-                toast.error(err.response.data.message);
+            });
+            return response.data;
+            } catch (error) {
+            throw error;
             }
-            })
+        },
+        onSuccess : () => {
+            queryClient.invalidateQueries(['user']);
+            toast.success("Leave course Successfully");
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+        })
 
 
     return (

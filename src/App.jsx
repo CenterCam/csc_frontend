@@ -43,11 +43,11 @@ return (
         <Route path="/contact" element={<Contact />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/your/class" element={<YourClass />} />
         <Route path="/postDetail/:id" element={<PostDetail />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/video/:id" element={<VideoPage />} />
           <Route path="/courseDetail" element={<CourseDetail />} />
+          <Route path="/your/class" element={<YourClass />} />
         </Route>
         <Route element={<ProtectedAdminRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
