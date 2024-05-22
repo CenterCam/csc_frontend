@@ -163,7 +163,6 @@ export default function UserCreateForm() {
                     Authorization : `Bearer ${csc_user.token}`
                 }
             });
-            console.log(csc_user.token);
             return response.data;
             } catch (error) {
             throw error;
@@ -171,6 +170,7 @@ export default function UserCreateForm() {
         },
         onSuccess : () => {
             queryClient.invalidateQueries(['user']);
+            setOpen(!isOpen);
             toast.success("Course is added Successfully");
         },
         onError : (err) => {
@@ -178,7 +178,34 @@ export default function UserCreateForm() {
         }
         })
 
-    console.log(courses);
+        const userLeaveCourse = async (course_id)=>{
+            await deleteCourseFromUser(course_id);
+        }
+
+        const { isPending : pending3 , mutateAsync : deleteCourseFromUser } = useMutation({
+            mutationFn : async (id)=>{
+                console.log(id);
+                try {
+                const response = await axios.delete(`${proxy}/api/courses/delete/user/${id}`,
+                {
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+                } catch (error) {
+                throw error;
+                }
+            },
+            onSuccess : () => {
+                queryClient.invalidateQueries(['user']);
+                toast.success("Leave course Successfully");
+            },
+            onError : (err) => {
+                toast.error(err.response.data.message);
+            }
+            })
+
 
     return (
         <div>
@@ -306,7 +333,7 @@ export default function UserCreateForm() {
                         <div key={i} className='w-60 border-2 rounded-lg p-3 shadow-lg' >
                             <img className='w-full h-36 object-cover' src={item.image} alt="" />
                             <p>{item.title}</p>
-                            <Button className="bg-red-500 text-xs hover:bg-red-400">Remove</Button>
+                            <Button onClick={()=>userLeaveCourse(item.id)} className="bg-red-500 text-xs hover:bg-red-400">Remove</Button>
                         </div>
                     ))
                 }
