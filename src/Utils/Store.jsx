@@ -14,6 +14,7 @@ function reducer(state, action) {
       Cookies.set('csc_user', JSON.stringify(action.payload) , { expires: 1 });
       return {...state , csc_user:action.payload};
     case 'USER_SIGNOUT' : 
+      Cookies.remove('csc_user');
       return {...state , 
         csc_user:null ,
       };

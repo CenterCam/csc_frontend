@@ -13,7 +13,6 @@ export default function Navbar({page}) {
   const logout = (e)=>{
     e.preventDefault();
     dispatch({type:"USER_SIGNOUT"})
-    Cookies.remove("csc_token");
     navigate("/");
   }
   return (

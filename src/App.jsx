@@ -48,6 +48,8 @@ return (
         <Route element={<ProtectedRoutes />}>
           <Route path="/video/:id" element={<VideoPage />} />
           <Route path="/courseDetail" element={<CourseDetail />} />
+        </Route>
+        <Route element={<ProtectedAdminRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/dashboard/user' element={<AdminUser />} />
           <Route path='/dashboard/user/create' element={<UserCreateForm />} />
@@ -75,3 +77,11 @@ export const ProtectedRoutes = () => {
   const {csc_user} = state;
   return csc_user ? <Outlet /> : <Navigate to={"/signin"} />
 }
+
+export const ProtectedAdminRoutes = () => {
+  const {state , dispatch} = useContext(Store);
+  const {csc_user} = state;
+  return csc_user.user.role == "admin" ? <Outlet /> : <Navigate to={"/"} />
+}
+
+

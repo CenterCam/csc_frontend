@@ -17,9 +17,13 @@ import { proxy } from '@/Utils/Utils';
 import Loading from '@/Components/ui/Loading';
 import { data } from 'autoprefixer';
 import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+import { Trash } from 'lucide-react';
 
 export default function UserCreateForm() {
     const {id} = useParams();
+
+    const [isOpen , setOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -62,6 +66,7 @@ export default function UserCreateForm() {
               }
           }
       });
+
   
     
       const form = useForm({
@@ -111,12 +116,74 @@ export default function UserCreateForm() {
     }
     })
 
+
+    const { isLoading: loading3 , data:allCourses} = useQuery({ 
+        queryKey: ['allCourse'], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/courses`,{
+                    headers : {
+                        Authorization : `Bearer ${csc_user.token}`
+                    }
+                });
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+    });
     
+    const user_id = user?.id;
+    const [courseId , setCourseId] = useState(null);
+
+    const {isLoading:loading2 , isError:error2, data:courses} = useQuery({ 
+        queryKey: ['courses',{id:user?.id}], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/course/user/${user_id}`);
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+    });
+
+    const hanldeAddUserCourse = async () => {
+        await addCourseToStudent();
+    }
+
+    const { isPending : pending2 , mutateAsync : addCourseToStudent } = useMutation({
+        mutationFn : async (state)=>{
+            try {
+            const response = await axios.post(`${proxy}/api/courses/add/user/${user_id}/${courseId}`,
+            {}
+            ,
+            {
+                headers : {
+                    Authorization : `Bearer ${csc_user.token}`
+                }
+            });
+            console.log(csc_user.token);
+            return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : () => {
+            queryClient.invalidateQueries(['user']);
+            toast.success("Course is added Successfully");
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+        })
+
+    console.log(courses);
 
     return (
         <div>
     <NavbarDashboard />
-    <div className='p-3 w-full flex justify-center items-center'>
+    <div className='p-3 w-full flex flex-col justify-center items-center'>
         <div className=" w-full md:w-1/2 ">
             <p className="my-3 font-bold text-black text-3xl" >Update User</p>
             {
@@ -204,6 +271,46 @@ export default function UserCreateForm() {
                 </form>
                 </Form>
             }
+        </div>
+        <div className=" w-full md:w-1/2 mt-9">
+            <div className='flex gap-3 items-center'>
+                <p className="my-3 font-bold text-black text-3xl" >Course</p>
+                <Button onClick={()=>setOpen(!isOpen)}>Add</Button>
+                <Dialog open={isOpen} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                        <DialogTitle>Add Course To Student</DialogTitle>
+                        </DialogHeader>
+                        <Select onValueChange={(value)=>setCourseId(value)}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Please Select Course" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {
+                                    allCourses?.map((item,i)=>(
+                                        <SelectItem key={i} value={item.id} >{item.title}</SelectItem>
+                                    ))
+                                }
+                            </SelectContent>
+                        </Select>
+                        <Button onClick={hanldeAddUserCourse}>Submit</Button>
+                    </DialogContent>
+                </Dialog>
+            </div>
+            <div className='flex gap-3 flex-wrap w-full items-center justify-center mt-3'>
+                {
+                    courses?.length == 0 && <p>No Classes !!</p>
+                }
+                {
+                    courses?.map((item,i)=>(
+                        <div key={i} className='w-60 border-2 rounded-lg p-3 shadow-lg' >
+                            <img className='w-full h-36 object-cover' src={item.image} alt="" />
+                            <p>{item.title}</p>
+                            <Button className="bg-red-500 text-xs hover:bg-red-400">Remove</Button>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     </div>
     <Footer />
