@@ -89,7 +89,7 @@ export default function PostDetail() {
 
                                     ))
                                 }
-                                <div className=" flex justify-end text-orange-600 font-bold text-xs mt-3 "><a href="search/seemore/bachelor">SEE MORE</a></div>
+                                <div className=" flex justify-end text-orange-600 font-bold text-xs mt-3 "><Link to="/blog">SEE MORE</Link></div>
                             </div>
                         </div>
                     </section>
