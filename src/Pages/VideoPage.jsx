@@ -6,10 +6,11 @@ import { proxy } from '@/Utils/Utils'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { Camera, Video } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useContext } from 'react'
 import ReactPlayer from 'react-player/youtube'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export default function VideoPage() {
     const {id} = useParams();
@@ -42,7 +43,31 @@ export default function VideoPage() {
     });
     const videoId = queryParams.get("video") ? queryParams.get("video") : ( videos ? videos[0].id : "") ;
 
-    console.log(videos?.filter((item)=>item.id==videoId)[0].v_link);
+    const user_id = csc_user.user.id;
+    const {isLoading:loading3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
+        queryKey: ['coursesBelongToUser',{course_id}], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/course/user/${user_id}`);
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+    });
+    const isPaid = coursesBelongToUser?.find((x)=>x.course_id == course_id);
+
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if (!isPaid && course?.type=="paid") {
+            navigate("/");
+            toast.warning("Please contact to admin to buy this course!");
+        }
+    },[isPaid,course?.type])
+
+    if (isLoading&&loading2&&loading3) {
+        return <Loading />
+    }
   return (
     <div>
         <Navbar />

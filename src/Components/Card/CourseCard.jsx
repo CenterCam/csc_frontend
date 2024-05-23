@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
 
-export default function CourseCard({item}) {
+export default function CourseCard({item,coursesBelongToUser}) {
+  const isPaid = coursesBelongToUser?.find((x)=>x.course_id == item.id);
   return (
     <div className="course flex flex-col p-1 border justify-start items-start w-full h-[420px] overflow-hidden ">
         <div className="left w-full">
@@ -27,11 +28,15 @@ export default function CourseCard({item}) {
               <p className="text-gray-500 text-sm ">Duration : {item.duration}</p>
               <p className="text-orange-500 text-sm font-bold">2025-15-02</p>
             </div>
-            {
-              item.type == "paid" ?
-              <Button className="bg-orange-400 my-1 hover:bg-orange-600">${(item.price)}</Button> :
-              <Button className="bg-green-400 hover:bg-green-600">Free</Button>
-            }
+            <div className='my-1'>
+              {
+                isPaid ? 
+                <Button className="bg-green-400 hover:bg-green-600">View</Button> :
+                ( item.type == "paid" ?
+                <Button className="bg-orange-400 hover:bg-orange-600">${(item.price)}</Button> :
+                <Button className="bg-green-400 hover:bg-green-600"> Free</Button>)
+              }
+            </div>
         </div>
     </div>
   )

@@ -31,7 +31,18 @@ export default function Course() {
           }
       }
     });
-    console.log(courses);
+    const user_id = csc_user.user.id;
+    const {isLoading:loding3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
+        queryKey: ['coursesBelongToUser',{user_id}], 
+        queryFn: async ()=>{
+            try {
+                const response = await axios.get(`${proxy}/api/course/user/${user_id}`);
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        }
+    });
   return (
     <div>
         <Navbar page={"/course"} />
@@ -46,7 +57,7 @@ export default function Course() {
           <div className='columns-1 md:columns-2 xl:columns-3 space-y-9  px-6 md:px-14 lg:px-36 w-full'>
             {
               courses?.data.map((item,i)=>(
-                <CourseCard key={i} item={item} />  
+                <CourseCard key={i} item={item} coursesBelongToUser={coursesBelongToUser} />  
               ))
             }
           </div>
