@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom';
 
 export default function SmallCard({item}) {
+    const today = new Date();
+    const date = today.toISOString().slice(0,10);
     const myref = useRef();
     useEffect(()=>{
         if (myref.current) {
@@ -29,7 +31,7 @@ export default function SmallCard({item}) {
         </div>
         <div class="p-3"  >
             <div className="flex space-x-3 items-center ">
-                <div className="text-xs text-black font-bold">Deadline : {item.deadline.slice(0,10)}</div>
+                <div className={ item.deadline.slice(0,10) < date ? "font-normal text-sm text-red-600 " : "font-normal text-sm text-gray-700 "}>Deadline : {item.deadline.slice(0,10)}</div>
             </div>
             <Link to={`/postDetail/${item.id}`} class="font-bold text-lg hover:underline text-black">
                 <div>

@@ -31,7 +31,7 @@ export default function Course() {
           }
       }
     });
-    const user_id = csc_user.user.id;
+    const user_id = csc_user?.user?.id;
     const {isLoading:loding3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
         queryKey: ['coursesBelongToUser',{user_id}], 
         queryFn: async ()=>{

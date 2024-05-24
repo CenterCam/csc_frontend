@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function PostCard({item}) {
+  const today = new Date();
+  const date = today.toISOString().slice(0,10);
   return (
     <div className="max-w-sm w-72 bg-white border border-gray-200 rounded-lg shadow  mx-6 my-6 capitalize"> 
     <Link to={`/postDetail/${item.id}`}>
@@ -27,7 +29,7 @@ export default function PostCard({item}) {
         <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
           {item.program}
         </p>
-        <p className="font-normal text-sm text-gray-700 dark:text-gray-400">
+        <p className={ item.deadline.slice(0,10) < date ? "font-normal text-sm text-red-600 " : "font-normal text-sm text-gray-700 "}>
             Deadline : <span>{item.deadline.slice(0,10)}</span>
         </p>
       </div>
