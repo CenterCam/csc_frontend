@@ -117,14 +117,14 @@ export default function Home() {
             </h1>
             <div className='flex flex-col text-center w-5/6 space-y-3 mt-3 text-lg'>
                 <div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod quae delectus earum obcaecati quia odio animi vitae dolorum amet adipisci at, pariatur quo, ut quos atque sed, dignissimos molestiae? Molestiae?
+                Finding and comparing university scholarships worldwide involves researching various options that cater to different academic achievements, financial needs, and specific demographics or fields of study. 
                 </div>
                 <div>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo, fuga distinctio maxime ipsum maiores quod facere, sequi molestiae laudantium eaque possimus consequuntur est autem, dolores dolorum omnis nesciunt saepe. Neque.
+                Key factors to consider include the amount of funding provided, eligibility criteria, application requirements, and the duration of the scholarship.
                 </div>
                 <div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad eaque eos sunt asperiores minima veritatis facilis quisquam ea minus, porro dignissimos! Cumque voluptates tempore earum ullam eveniet nam quae accusantium.
-                </div>
+                Additionally, some scholarships offer valuable extras like mentorship programs, internships, and networking opportunities, which can enhance the educational experience and future career prospects.
+                 </div>
             </div>
           </section>
           <section className='mt-9 flex flex-col justify-center items-center mb-9'>

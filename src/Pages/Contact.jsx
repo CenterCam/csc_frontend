@@ -28,20 +28,19 @@ export default function Contact() {
               <div className='w-full flex justify-center font-bold text-3xl'>
                 Get Connected
               </div>
-              <div className='columns-1 lg:columns-3 p-3 md:px-24 mt-9 gap-9 space-y-6'>
-                <div className='shadow p-9 flex justify-center items-center flex-col overflow-hidden'>
+              <div className='columns-1 lg:columns-2 p-3 md:px-24 mt-9 gap-9 space-y-6 justify-items-center'>
+                <div className='shadow h-60 p-9 flex justify-center items-center flex-col overflow-hidden'>
                     <Mail />
                     <p className='text-xl font-bold mt-6'>Send Email</p>
-                    <p>scholarshipcentet@gmail.com</p>
-                    <p>scholarshipcentet@gmail.com</p>
+                    <p>scholarshipcenter.com@gmail.com</p>
                 </div>
-                <div className='shadow p-9 flex justify-center items-center flex-col overflow-hidden'>
+                {/* <div className='shadow p-9 flex justify-center items-center flex-col overflow-hidden'>
                     <Phone />
                     <p className='text-xl font-bold mt-6'>Call Us</p>
                     <p>+85578441752</p>
                     <p>+85578441752</p>
-                </div>
-                <div className='shadow p-9 flex justify-center items-center flex-col overflow-hidden'>
+                </div> */}
+                <div className='shadow h-60 p-9 flex justify-center items-center flex-col overflow-hidden'>
                     <Map />
                     <p className='text-xl font-bold mt-6'>Address</p>
                     <p className='w-60 text-center'>Morgan Tower, Koh Pich, Phnom Penh, Cambodia</p>

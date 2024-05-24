@@ -65,16 +65,13 @@ export default function VideoPage() {
         }
     },[isPaid,course?.type])
 
-    if (isLoading&&loading2&&loading3) {
+    if (isLoading || loading2 || loading3) {
         return <Loading />
     }
+
   return (
     <div>
         <Navbar />
-        {
-            isLoading ?
-            <Loading /> 
-            :
             <div className='flex flex-wrap justify-center gap-3 mt-3 px-3 '>
                 <div className='player-wrapper w-[360px]  md:w-[600px] flex flex-col gap-3'>
                     <div>
@@ -108,7 +105,6 @@ export default function VideoPage() {
                 </div>
 
             </div>
-        }
         <Footer />
     </div>
   )
