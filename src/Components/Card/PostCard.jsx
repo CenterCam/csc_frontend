@@ -31,8 +31,8 @@ export default function PostCard({item}) {
             Deadline : <span>{item.deadline.slice(0,10)}</span>
         </p>
       </div>
-      <a
-        href="/"
+      <Link
+        to={`/postDetail/${item.id}`}
         className="inline-flex rounded-md items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500"
       >
         Read more
@@ -51,7 +51,7 @@ export default function PostCard({item}) {
             d="M1 5h12m0 0L9 1m4 4L9 9"
           />
         </svg>
-      </a>
+      </Link>
     </div>
   </div>  
   )
