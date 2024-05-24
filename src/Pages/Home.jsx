@@ -8,12 +8,19 @@ import { useContext } from 'react'
 import { Store } from '@/Utils/Store'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { proxy } from '@/Utils/Utils'
+import { convertLaravelFormatToDate, proxy } from '@/Utils/Utils'
 import Loading from '@/Components/ui/Loading'
+import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
   const {state , dispatch} = useContext(Store);
   const {csc_user} = state;
+  const [destination, setDestination] = useState(null);
+  const [program, setProgram] = useState(null);
+  const [start, setStart] = useState(null);
+  const [until, setUntil] = useState(null);
+  const navigate = useNavigate();
+
   const {isLoading , isError, data:homepageData} = useQuery({ 
       queryKey: ['homepageData'], 
       queryFn: async ()=>{
@@ -25,6 +32,11 @@ export default function Home() {
           }
       }
     });
+
+    const handleSearch = (e)=>{
+      e.preventDefault();
+      navigate(`/search?destination=${destination}&&program=${program}&&start=${start}&&until=${until}`)
+    }
   return (
     <>
       {
@@ -40,9 +52,9 @@ export default function Home() {
             <h1 class=" font-bold text-lg md:text-2xl">
               Find Scholarships to Finance Your Study
             </h1>
-            <form action="" className=" mt-3 p-3 rounded-md grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-5 items-center ">
+            <form action="" onSubmit={handleSearch}  className=" mt-3 p-3 rounded-md grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-5 items-center ">
             <div className="">
-              <select required name="destination" className="rounded-md border-none capitalize text-sm w-56 focus:ring-0">
+              <select onChange={(e)=>setDestination(e.target.value)} value={destination} required name="destination" className="rounded-md border-none capitalize text-sm w-56 focus:ring-0">
                 <option >DESTINATION</option>
                 {
                   homepageData?.countries.map((item,i)=>(
@@ -52,7 +64,7 @@ export default function Home() {
               </select>
             </div>
             <div className="">
-              <select required name="program" className="rounded-md border-none text-sm capitalize  w-56 focus:ring-0">
+              <select onChange={(e)=>setProgram(e.target.value)} value={program} required name="program" className="rounded-md border-none text-sm capitalize  w-56 focus:ring-0">
                 <option selected>TYPE OF DEGREE</option>
                 {
                   homepageData?.programs.map((item,i)=>(
@@ -67,6 +79,7 @@ export default function Home() {
                 type="date"
                 className=" border-none focus:ring-0 text-xs pl-1"
                 name="start_date"
+                onChange={(e)=>setStart(e.target.value)} value={start}
                 id=""
                 required
               />
@@ -75,15 +88,15 @@ export default function Home() {
               <p>UNTIL</p>
               <input
                 type="date"
+                onChange={(e)=>setUntil(e.target.value)} value={until}
                 className=" border-none focus:ring-0 text-xs pl-1"
                 name="end_date"
                 id=""
                 required
               />
             </div>
-            <button className=" bg-orange-500 p-2 rounded-md text-sm font-bold text-white mx-3 ">
-              Find Scholarship
-            </button>
+            <input type="submit" value=" Find Scholarship"  className=" bg-orange-500 p-2 rounded-md text-sm font-bold text-white mx-3 " />
+
           </form>
           </section>
           <section className='p-3 flex flex-col justify-center items-center'>

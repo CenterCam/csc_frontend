@@ -28,6 +28,7 @@ import { Store } from './Utils/Store'
 import VideoPage from './Pages/VideoPage'
 import NotFoundPage from './Pages/NotFoundPage'
 import YourClass from './Pages/YourClass'
+import SearchResult from './Pages/SearchResult'
 
 function App() {
   const queryClient = new QueryClient()
@@ -44,6 +45,7 @@ return (
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/postDetail/:id" element={<PostDetail />} />
+        <Route path="/search" element={<SearchResult />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/video/:id" element={<VideoPage />} />
           <Route path="/courseDetail" element={<CourseDetail />} />
