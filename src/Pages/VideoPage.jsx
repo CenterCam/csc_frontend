@@ -59,13 +59,13 @@ export default function VideoPage() {
 
     const navigate = useNavigate();
     useEffect(()=>{
-        if (!isPaid && course?.type=="paid") {
+        if ( coursesBelongToUser && !isPaid && course && course?.type=="paid") {
             navigate("/");
             toast.warning("Please contact to admin to buy this course!");
         }
-    },[isPaid,course?.type])
+    },[isPaid,course])
 
-    if (isLoading || loading2 || loading3) {
+    if (isLoading || loading2 || loading3 ) {
         return <Loading />
     }
 

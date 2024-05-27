@@ -14,11 +14,11 @@ export default function PostCard({item}) {
       />
     </Link>
     <div className="p-5">
-      <a href="/">
+      <div>
         <p className="mb-2 text-lg font-bold tracking-tight hover:underline text-black line-clamp-2">
           {item.title}
         </p>
-      </a>
+      </div>
       <p className="mb-3 font-normal text-sm text-gray-700 dark:text-gray-400 line-clamp-2">
         {item.shortDescription} 
       </p>

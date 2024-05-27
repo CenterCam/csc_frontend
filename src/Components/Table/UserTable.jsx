@@ -10,7 +10,7 @@ import { proxy } from '@/Utils/Utils'
 import axios from 'axios'
 import Loading from '../ui/Loading'
 import { toast } from 'sonner'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
   
 
