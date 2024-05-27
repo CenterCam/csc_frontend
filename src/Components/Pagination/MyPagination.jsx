@@ -2,7 +2,7 @@
   
 import React from 'react'
 import { useLocation } from "react-router-dom";
-import { Pagination, PaginationContent, PaginationItem } from '../ui/pagination';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext } from '../ui/pagination';
 
 export default function MyPagination({links,total,current,url}) {
   const location = useLocation();
