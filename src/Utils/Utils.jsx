@@ -1,5 +1,6 @@
-// export const proxy = "https://hongnnureach.info/";
-export const proxy = "http://127.0.0.1:8000";
+export const proxy = "https://hongnnureach.info/";
+// export const proxy = "http://127.0.0.1:8000";
+
 
 
 export const convertDateToLaravelFormat = (dateString) => {
