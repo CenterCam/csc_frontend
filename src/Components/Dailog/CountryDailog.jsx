@@ -1,11 +1,5 @@
 import React, { useContext } from 'react'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
+
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -18,6 +12,7 @@ import { proxy } from '@/Utils/Utils'
 import { Store } from '@/Utils/Store'
 import { toast } from 'sonner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
   
 
 export default function CountryDailog({isOpen,setOpen}) {

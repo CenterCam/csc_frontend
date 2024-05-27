@@ -5,7 +5,6 @@ import axios from 'axios';
 import { Edit, Trash } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { toast } from 'sonner';
-import VideoDailog from '../Dailog/VideoDailog';
 import { useNavigate, useParams } from 'react-router-dom';
 import VideoUpdateDailog from '../Dailog/VideoUpdateDailog';
 

@@ -1,16 +1,16 @@
-import React, { useContext } from 'react'
-import Navbar from '../Components/Frontend-Navbar/Navbar'
-import Footer from '../Components/Frontend-Footer/Footer'
-import Card from '../Components/Card/Card'
-import SmallCard from '../Components/Card/SmallCard'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Store } from '@/Utils/Store'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { proxy } from '@/Utils/Utils'
-import Loading from '@/Components/ui/Loading'
-import MyPagination from '@/Components/Pagination/MyPagination'
-import { Input } from '@/Components/ui/input'
+import SmallCard from "@/Components/Card/SmallCard";
+import Footer from "@/Components/Frontend-Footer/Footer";
+import Navbar from "@/Components/Frontend-Navbar/Navbar";
+import MyPagination from "@/Components/Pagination/MyPagination";
+import Loading from "@/Components/ui/Loading";
+import { Input } from "@/Components/ui/input";
+import { Store } from "@/Utils/Store";
+import { proxy } from "@/Utils/Utils";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 export default function Blog() {
   const location = useLocation();

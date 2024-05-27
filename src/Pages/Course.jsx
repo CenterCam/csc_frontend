@@ -1,14 +1,15 @@
-import React, { useContext } from 'react'
-import Navbar from '../Components/Frontend-Navbar/Navbar'
-import Footer from '../Components/Frontend-Footer/Footer'
-import CourseCard from '../Components/Card/CourseCard'
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { Store } from '@/Utils/Store';
-import axios from 'axios';
-import { proxy } from '@/Utils/Utils';
-import { Input } from '@/Components/ui/input';
+import CourseCard from '@/Components/Card/CourseCard';
+import Footer from '@/Components/Frontend-Footer/Footer';
+import Navbar from '@/Components/Frontend-Navbar/Navbar';
 import MyPagination from '@/Components/Pagination/MyPagination';
+import { Input } from '@/Components/ui/input';
+import { Store } from '@/Utils/Store';
+import { proxy } from '@/Utils/Utils';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import React, { useContext } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 export default function Course() {
   const location = useLocation();

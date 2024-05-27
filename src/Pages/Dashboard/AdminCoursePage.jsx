@@ -2,11 +2,8 @@ import React from 'react'
 import NavbarDashboard from '../../Components/Dashboard-Navbar/NavbarDashboard'
 import Footer from '../../Components/Frontend-Footer/Footer'
 import { Link } from 'react-router-dom'
-import { toast } from 'sonner';
-import { Button } from '@/Components/ui/button';
-import PostTable from '@/Components/Table/PostTable';
-import { users } from '@/Components/Table/RandomUser';
 import CourseTable from '@/Components/Table/CourseTable';
+import { Button } from '@/Components/ui/button';
 
 export default function AdminXoursePage() {
   return (
@@ -20,7 +17,7 @@ export default function AdminXoursePage() {
                 </Link>
             </div>
             <div className='w-full'>
-                <CourseTable users={users} />
+                <CourseTable  />
             </div>
         </div>
         <Footer />

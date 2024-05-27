@@ -29,7 +29,7 @@ import { proxy } from '@/Utils/Utils'
 import Loading from '../ui/Loading'
   
 
-export default function CourseTable({users}) {
+export default function CourseTable() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const search = queryParams.get("search") || "all";
