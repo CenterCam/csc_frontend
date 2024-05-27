@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner';
 import { Button } from '@/Components/ui/button';
 import PostTable from '@/Components/Table/PostTable';
-import { users } from '@/Components/Table/RandomUser';
 
 export default function AdminPostPage() {
     const id = "asfsd";
@@ -28,7 +27,7 @@ export default function AdminPostPage() {
                 </Link>
             </div>
             <div className='w-full'>
-                <PostTable users={users} />
+                <PostTable />
             </div>
         </div>
         <Footer />

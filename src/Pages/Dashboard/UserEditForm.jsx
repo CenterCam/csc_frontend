@@ -9,7 +9,6 @@ import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useNavigate, useParams } from 'react-router-dom';
-import { users } from '@/Components/Table/RandomUser';
 import { Store } from '@/Utils/Store';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';

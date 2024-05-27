@@ -34,7 +34,7 @@ export default function SearchResult() {
   return (
     <div>
         <Navbar />
-        <div className='p-3 flex flex-col px-3 md:px-24 lg:px-36'>
+        <div className='p-3 flex flex-col px-3 md:px-24 lg:px-36 mt-6'>
             <p className='font-bold text-3xl '> Your Result</p>
                 {
                     posts?.length ==0 

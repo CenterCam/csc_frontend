@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Button } from '@/Components/ui/button'
 import UserTable from '@/Components/Table/UserTable'
-import { users } from '@/Components/Table/RandomUser'
 
 export default function AdminUser() {
   const handleDelete = (e)=>{
@@ -25,7 +24,7 @@ export default function AdminUser() {
                     <Button className="bg-orange-400 hover:bg-orange-600 shadow">Create User</Button>
                 </Link>
             </div>
-            <UserTable users={users}/>
+            <UserTable />
         </div>
         <Footer />
     </div>

@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
   
 
-export default function PostTable({users}) {
+export default function PostTable() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const search = queryParams.get("search") || "all";
