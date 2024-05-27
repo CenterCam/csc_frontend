@@ -1,4 +1,4 @@
-export const proxy = "http://localhost:8000";
+export const proxy = "https://hongnnureach.info";
 
 export const convertDateToLaravelFormat = (dateString) => {
     // Create a Date object from the string
