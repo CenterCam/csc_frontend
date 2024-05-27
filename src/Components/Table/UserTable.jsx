@@ -1,24 +1,6 @@
 import { Edit, Trash, Trash2 } from 'lucide-react'
 import React, { useContext, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
   
 import { Input } from '../ui/input';
 import MyPagination from '../Pagination/MyPagination';
@@ -28,10 +10,12 @@ import { proxy } from '@/Utils/Utils'
 import axios from 'axios'
 import Loading from '../ui/Loading'
 import { toast } from 'sonner'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
   
 
 export default function UserTable() {
-    const location = useLocation();
+    const location = useLocation(); 
     const queryParams = new URLSearchParams(location.search);
     const search = queryParams.get("search") || "all";
     const sortBy = queryParams.get("sortBy") || "created_at";
