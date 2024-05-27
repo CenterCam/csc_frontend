@@ -1,7 +1,6 @@
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
@@ -14,10 +13,6 @@ import { useLocation } from "react-router-dom";
 export default function MyPagination({links,total,current,url}) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const search = queryParams.get("search") || "all";
-  const sortBy = queryParams.get("sortBy") || "name";
-  const sortDir = queryParams.get("sortDir") || "desc";
-  const page =  queryParams.get("page") || 1;
   return (
     <>
         <div className="w-full">
