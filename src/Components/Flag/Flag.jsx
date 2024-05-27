@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Flage({item}) {
+export default function Flag({item}) {
   return (
     <div className="m-6">
         <img
