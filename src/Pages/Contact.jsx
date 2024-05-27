@@ -15,13 +15,14 @@ export default function Contact() {
             >
               <div className="font-bold flex justify-center text-3xl my-6">Our Location</div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3909.1378913451344!2d104.91743867515679!3d11.54196468865721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951b2c332c0ad%3A0xe2ede11538dc1036!2zQ2FtYm9kaWEgU2Nob2xhcnNoaXAgQ2VudGVyIOGemOGeh-GfkuGeiOGemOGejuGfkuGejOGem-GeouGetuGeoOGetuGemuGevOGelOGegOGemuGejuGfjeGegOGemOGfkuGeluGeu-Geh-Getg!5e0!3m2!1sen!2skh!4v1700540321514!5m2!1sen!2skh"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15636.42759512866!2d104.92658974612318!3d11.544188868480253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310956d2a2d70f1d%3A0xea84a6a9241db2f6!2sMorgan%20Tower!5e0!3m2!1sen!2skh!4v1716812431430!5m2!1sen!2skh"
                 className="w-96 md:w-full rounded-lg"
                 height="450"
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
+              
             </div>
           </div>
           <div className='w-full'>
