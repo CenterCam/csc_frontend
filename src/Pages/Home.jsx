@@ -52,9 +52,9 @@ export default function Home() {
             <h1 class=" font-bold text-lg md:text-2xl">
               Find Scholarships to Finance Your Study
             </h1>
-            <form action="" onSubmit={handleSearch}  className=" mt-3 p-3 rounded-md grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-5 items-center ">
+            <form action="" onSubmit={handleSearch}  className=" mt-3 p-3 rounded-md columns-1 md:columns-1 xl:columns-5">
             <div className="">
-              <select onChange={(e)=>setDestination(e.target.value)} value={destination} required name="destination" className="rounded-md bg-inherit p-2 border-none capitalize text-sm w-56 focus:ring-0 ">
+              <select onChange={(e)=>setDestination(e.target.value)} value={destination} required name="destination" className="rounded-md bg-inherit border-2 p-2  capitalize text-sm  w-56 focus:ring-0 ">
                 <option >DESTINATION</option>
                 {
                   homepageData?.countries.map((item,i)=>(
@@ -64,7 +64,7 @@ export default function Home() {
               </select>
             </div>
             <div className="">
-              <select onChange={(e)=>setProgram(e.target.value)} value={program} required name="program" className="rounded-md bg-inherit p-2 border-none text-sm capitalize  w-56 focus:ring-0">
+              <select onChange={(e)=>setProgram(e.target.value)} value={program} required name="program" className="rounded-md bg-inherit border-2 p-2  text-sm capitalize  w-56 focus:ring-0">
                 <option selected>TYPE OF DEGREE</option>
                 {
                   homepageData?.programs.map((item,i)=>(
@@ -77,7 +77,7 @@ export default function Home() {
               <p>FROM</p>
               <input
                 type="date"
-                className=" border-none bg-inherit p-2 focus:ring-0 text-xs pl-1"
+                className="  bg-inherit border-2 rounded-md p-2 focus:ring-0 text-xs pl-1 w-full"
                 name="start_date"
                 onChange={(e)=>setStart(e.target.value)} value={start}
                 id=""
@@ -89,7 +89,7 @@ export default function Home() {
               <input
                 type="date"
                 onChange={(e)=>setUntil(e.target.value)} value={until}
-                className=" border-none focus:ring-0 text-xs pl-1 bg-inherit p-2"
+                className="  focus:ring-0md rounded-md text-xs pl-1 bg-inherit border-2 p-2 w-full"
                 name="end_date"
                 id=""
                 required
