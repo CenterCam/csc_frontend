@@ -69,19 +69,16 @@ export default function NavbarDashboard({page}) {
                 <div className='xl:hidden absolute right-0 top-16   '>
                     <ul className="flex flex-col p-4 w-60 font-medium border border-gray-100 rounded-lg bg-white list-none">
                         <li>
-                            <Link to="/" className= 'block py-2 px-3 text-black rounded'>Dashboard</Link>
+                            <Link to="/dashboard" className= 'block py-2 px-3 text-black rounded'>Dashboard</Link>
                         </li>
                         <li>
-                            <Link to="/blog" className= 'block py-2 px-3 text-black rounded'>User</Link>
+                            <Link to="/dashboard/user" className= 'block py-2 px-3 text-black rounded'>User</Link>
                         </li>
                         <li>
-                            <Link to="/scholarship" className= 'block py-2 px-3 text-black rounded'>Post</Link>
+                            <Link to="/dashboard/post" className= 'block py-2 px-3 text-black rounded'>Post</Link>
                         </li>
                         <li>
-                            <Link to="/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
-                        </li>
-                        <li>
-                            <Link to="/contact" className= 'block py-2 px-3 text-black rounded'>Flag</Link>
+                            <Link to="/dashboard/course" className= 'block py-2 px-3 text-black rounded'>Course</Link>
                         </li>
                     </ul>
                 </div>
