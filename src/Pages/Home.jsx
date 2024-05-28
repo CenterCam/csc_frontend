@@ -52,7 +52,7 @@ export default function Home() {
             <h1 class=" font-bold text-lg md:text-2xl">
               Find Scholarships to Finance Your Study
             </h1>
-            <form action="" onSubmit={handleSearch}  className=" mt-3 p-3 rounded-md columns-1 md:columns-1 xl:columns-5">
+            <form action="" onSubmit={handleSearch}  className=" mt-3 p-3 rounded-md columns-1 md:columns-1 xl:columns-5 space-y-3">
             <div className="">
               <select onChange={(e)=>setDestination(e.target.value)} value={destination} required name="destination" className="rounded-md bg-inherit border-2 p-2  capitalize text-sm  w-56 focus:ring-0 ">
                 <option >DESTINATION</option>
@@ -95,7 +95,7 @@ export default function Home() {
                 required
               />
             </div>
-            <input type="submit" value=" Find Scholarship"  className=" bg-orange-500 p-2 rounded-md text-sm font-bold text-white mx-3 " />
+            <input type="submit" value=" Find Scholarship"  className=" bg-orange-500 w-full p-2 rounded-md text-sm font-bold text-white  " />
 
           </form>
           </section>
