@@ -1,4 +1,4 @@
-export const proxy = "https://hongnnureach.info";
+export const proxy = "https://api.hongnnureach.info";
 // export const proxy = "http://127.0.0.1:8000";
 
 
