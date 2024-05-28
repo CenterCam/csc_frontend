@@ -48,14 +48,14 @@ export default function Course() {
     <div>
         <Navbar page={"/course"} />
 
-        <section className="px-9 md:px-24 mb-9">
+        <section className="px-3 md:px-24 mb-9">
           <div className='flex items-center gap-3 my-6 border-b pb-6'>
             <div className="font-bold text-lg ">Course</div>
             <div>
               <Input className="w-full sm:w-96" onChange={(e)=>navigate(`/course?search=${e.target.value}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${page}`)} type="text"  placeholder="Search..." />
             </div>
           </div>
-          <div className='columns-1 md:columns-2 xl:columns-3 space-y-9  px-6 md:px-14 lg:px-36 w-full'>
+          <div className='columns-1 md:columns-2 xl:columns-3 space-y-9  md:px-12 lg:px-24 w-full'>
             {
               courses?.data.map((item,i)=>(
                 <CourseCard key={i} item={item} coursesBelongToUser={coursesBelongToUser} />  

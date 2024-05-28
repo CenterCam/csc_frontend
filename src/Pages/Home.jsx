@@ -103,7 +103,7 @@ export default function Home() {
             <h1 className=" font-bold text-lg md:text-2xl">
               The Latest Scholarships
             </h1>
-            <div className=" grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+            <div className="columns-1 md:columns-2 lg:columns-4 space-y-3 gap-6 mt-6 xl:px-12">
               {
                   homepageData?.posts.map((item,i)=>(
                     <PostCard item={item} key={i} />       

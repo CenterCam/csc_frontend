@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 export default function CourseCard({item,coursesBelongToUser}) {
   const isPaid = coursesBelongToUser?.find((x)=>x.course_id == item.id);
   return (
-    <div className="course flex flex-col p-1 border justify-start items-start w-full h-[420px] overflow-hidden ">
+    <div className="course flex flex-col p-1 border justify-start items-start w-full sm:h-[420px] overflow-hidden ">
         <div className="left w-full">
             <img
               src={item.image}
