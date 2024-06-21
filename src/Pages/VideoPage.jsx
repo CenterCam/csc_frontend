@@ -6,7 +6,7 @@ import { proxy } from '@/Utils/Utils'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { Camera, Video } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { useContext } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -28,7 +28,8 @@ export default function VideoPage() {
             } catch (error) {
                 throw error;
             }
-        }
+        },
+        cacheTime : 0
     });
     const {isLoading:loading2 , isError:error2, data:course} = useQuery({ 
         queryKey: ['course',{course_id}], 
@@ -39,7 +40,9 @@ export default function VideoPage() {
             } catch (error) {
                 throw error;
             }
-        }
+        },
+        cacheTime : 0
+
     });
     const videoId = queryParams.get("video") ? queryParams.get("video") : ( videos ? videos[0].id : "") ;
 
@@ -53,24 +56,25 @@ export default function VideoPage() {
             } catch (error) {
                 throw error;
             }
-        }
+        },
+        cacheTime:0
     });
     const isPaid = coursesBelongToUser?.find((x)=>x.course_id == course_id);
 
     const navigate = useNavigate();
     useEffect(()=>{
-        if ( coursesBelongToUser && !isPaid && course && course?.type=="paid") {
-            navigate("/");
-            toast.warning("Please contact to admin to buy this course!");
+        if ( coursesBelongToUser?.length == 0 && course?.type=="paid") {
+            navigate("/notpurchased");
         }
-    },[isPaid,course])
+    },[isPaid,course,coursesBelongToUser]);
 
-    if (isLoading || loading2 || loading3 ) {
+
+    if ( isLoading || loading2 || loading3 ) {
         return <Loading />
     }
 
   return (
-    <div>
+    <>
         <Navbar />
             <div className='flex flex-wrap justify-center gap-3 mt-3 px-3 '>
                 <div className='player-wrapper w-[360px]  md:w-[600px] flex flex-col gap-3'>
@@ -106,6 +110,6 @@ export default function VideoPage() {
 
             </div>
         <Footer />
-    </div>
+    </>
   )
 }

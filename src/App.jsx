@@ -29,6 +29,7 @@ import VideoPage from './Pages/VideoPage'
 import NotFoundPage from './Pages/NotFoundPage'
 import YourClass from './Pages/YourClass'
 import SearchResult from './Pages/SearchResult'
+import NotPurchasedPage from './Pages/NotPurchasedPage'
 
 function App() {
   const queryClient = new QueryClient()
@@ -50,6 +51,7 @@ return (
           <Route path="/video/:id" element={<VideoPage />} />
           <Route path="/courseDetail" element={<CourseDetail />} />
           <Route path="/your/class" element={<YourClass />} />
+          <Route path='/notpurchased' element={<NotPurchasedPage/>} />
         </Route>
         <Route element={<ProtectedAdminRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
@@ -62,6 +64,7 @@ return (
           <Route path='/dashboard/course' element={<AdminCoursePage />} />
           <Route path='/dashboard/course/create' element={<CourseCreateForm />} />
           <Route path='/dashboard/course/edit/:id' element={<CourseUpdateForm />} />
+
         </Route>
         <Route path="*" element={<NotFoundPage />} /> 
       </Routes>

@@ -2,6 +2,7 @@ import CourseCard from '@/Components/Card/CourseCard';
 import Footer from '@/Components/Frontend-Footer/Footer';
 import Navbar from '@/Components/Frontend-Navbar/Navbar';
 import MyPagination from '@/Components/Pagination/MyPagination';
+import Loading from '@/Components/ui/Loading';
 import { Input } from '@/Components/ui/input';
 import { Store } from '@/Utils/Store';
 import { proxy } from '@/Utils/Utils';
@@ -33,7 +34,7 @@ export default function Course() {
       }
     });
     const user_id = csc_user?.user?.id;
-    const {isLoading:loding3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
+    const {isLoading:loading3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
         queryKey: ['coursesBelongToUser',{user_id}], 
         queryFn: async ()=>{
             try {
@@ -44,6 +45,10 @@ export default function Course() {
             }
         }
     });
+    if ( isLoading || loading3 ) {
+      return <Loading />
+    }
+
   return (
     <div>
         <Navbar page={"/course"} />
