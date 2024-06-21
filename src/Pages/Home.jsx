@@ -84,18 +84,20 @@ export default function Home() {
                 required
               />
             </div>
-          <div className=" flex items-center text-xs w-56 pl-1  gap-3">
-              <p>UNTIL</p>
-              <input
-                type="date"
-                onChange={(e)=>setUntil(e.target.value)} value={until}
-                className="  focus:ring-0md rounded-md text-xs pl-1 bg-inherit border-2 p-2 w-full"
-                name="end_date"
-                id=""
-                required
-              />
+            <div className=" flex items-center text-xs w-56 pl-1  gap-3">
+                <p>UNTIL</p>
+                <input
+                  type="date"
+                  onChange={(e)=>setUntil(e.target.value)} value={until}
+                  className="  focus:ring-0md rounded-md text-xs pl-1 bg-inherit border-2 p-2 w-full"
+                  name="end_date"
+                  id=""
+                  required
+                />
             </div>
-            <input type="submit" value=" Find Scholarship"  className=" bg-orange-500 w-full p-2 rounded-md text-sm font-bold text-white  " />
+            <div>
+              <input type="submit" value=" Find Scholarship"  className=" bg-orange-500 w-full p-2 rounded-md text-sm font-bold text-white  " />
+            </div>
 
           </form>
           </section>
