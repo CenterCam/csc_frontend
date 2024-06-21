@@ -60,7 +60,7 @@ export default function PostTable() {
         },
         onSuccess : () => {
           queryClient.invalidateQueries(['users']);
-          toast.success("User is deleted successfully");
+          toast.success("Post is deleted successfully");
         },
         onError : (err) => {
           toast.error(err.response.data.message);
