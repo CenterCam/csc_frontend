@@ -21,24 +21,25 @@ export default function SmallCard({item}) {
         }
     },[])
   return (
-    <div className=" h-[380px] sm:h-[520px] transition overflow-hidden">
+    <div className=" h-[300px] sm:h-[520px] transition overflow-hidden">
         <div>
             <img
             src={item.imgLink}
             alt="post-img"
-            className="h-64 sm:h-96 lg:h-[400px] w-full object-cover  "
+            className="h-48 sm:h-96 lg:h-[390px] w-full object-cover  "
             />
         </div>
         <div class="p-3"  >
             <div className="flex space-x-3 items-center ">
-                <div className={ item.deadline.slice(0,10) < date ? "font-normal text-sm text-red-600 " : "font-normal text-sm text-gray-700 "}>Deadline : {item.deadline.slice(0,10)}</div>
+                <div className={ item.deadline.slice(0,10) < date ? "font-normal text-xs sm:text-sm text-red-600 " : "font-normal text-xs sm:text-sm text-gray-700 "}>Deadline : {item.deadline.slice(0,10)}
+                </div>
             </div>
             <Link to={`/postDetail/${item.id}`} class="font-bold text-lg hover:underline text-black">
                 <div>
-                    <p class=" line-clamp-1">
+                    <p class=" line-clamp-1 text-xs sm:text-lg">
                         {item.title}
                     </p>
-                    <p class="text-sm line-clamp-2">{item.shortDescription}</p>
+                    <p class="text-xs sm:text-sm line-clamp-2">{item.shortDescription}</p>
                 </div>
             </Link>
         </div>

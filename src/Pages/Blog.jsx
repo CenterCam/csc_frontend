@@ -37,14 +37,14 @@ export default function Blog() {
   return (
     <div>
       <Navbar page={"/blog"} />
-      <section className="recent border-b  p-3">
+      <section className="recent border-b  p-3 px-3 md:px-24 lg:px-36" >
         <div className='flex items-center gap-3 my-6 border-b pb-6'>
           <div className="font-bold text-lg ">Recent Post</div>
           <div>
             <Input className="w-full sm:w-96" onChange={(e)=>navigate(`/blog?search=${e.target.value}&&sortBy=${sortBy}&&sortDir=${sortDir}&&page=${page}`)} type="text"  placeholder="Search..." />
           </div>
         </div>
-        <div className=" columns-1 md:columns-2 lg:columns-3 space-y-9 px-6 md:px-24 lg:px-60 w-full">
+        <div className=" columns-2 lg:columns-4 space-y-9 mt-9 w-full ">
           {
             isLoading ? 
             <Loading />
