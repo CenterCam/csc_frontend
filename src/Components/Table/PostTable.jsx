@@ -66,6 +66,9 @@ export default function PostTable() {
           toast.error(err.response.data.message);
         }
       })
+
+    console.log(data?.data);
+    //console.log(csc_user.user.id);
   return (
     <>
     <div className='flex justify-between mt-6 flex-wrap gap-3'>
@@ -108,25 +111,30 @@ export default function PostTable() {
                         <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.program}</div>
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.country}</div>
                         <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.status}</div>
-                        <div className='flex justify-center w-20 gap-1'>
-                            <Link to={`/dashboard/post/edit/${item.id}`}><Edit /></Link>
-                            <AlertDialog>
-                                <AlertDialogTrigger><Trash /></AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete your account
-                                        and remove your data from our servers.
-                                    </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={()=>deletePostMutation(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                                </AlertDialog>
-                        </div>
+                        {
+                            item.user.id !== csc_user.user.id || csc_user.user.role !== "admin" ?
+                            <p>No Permission</p>
+                            :
+                            <div className='flex justify-center w-20 gap-1'>
+                                <Link to={`/dashboard/post/edit/${item.id}`}><Edit /></Link>
+                                <AlertDialog>
+                                    <AlertDialogTrigger><Trash /></AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete your account
+                                            and remove your data from our servers.
+                                        </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={()=>deletePostMutation(item.id)} className="bg-red-600 hover:bg-red-500">Continue</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                    </AlertDialog>
+                            </div>
+                        }
                     </div>
                 ))
             }

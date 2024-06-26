@@ -259,6 +259,7 @@ export default function UserCreateForm() {
                             <SelectContent>
                                 <SelectItem value="user">User</SelectItem>
                                 <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="creator">creator</SelectItem>
                             </SelectContent>
                             </Select>
                             <FormMessage />

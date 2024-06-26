@@ -63,7 +63,8 @@ export default function UserTable() {
         onError : (err) => {
           toast.error(err.response.data.message);
         }
-      })
+      });
+      console.log(data?.data);
   return (
     <>
     <div className='flex justify-between mt-6 flex-wrap gap-3'>
