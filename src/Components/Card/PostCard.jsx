@@ -5,7 +5,7 @@ export default function PostCard({item}) {
   const today = new Date();
   const date = today.toISOString().slice(0,10);
   return (
-    <div className="overflow-hidden h-[450px] lg:h-[540px] max-w-sm w-full bg-white  capitalize"> 
+    <div className="overflow-hidden h-[450px] sm:h-[540px] max-w-sm w-full bg-white  capitalize"> 
     <Link to={`/postDetail/${item.id}`}>
       <img
         className=" h-56 sm:h-80 w-full object-cover"

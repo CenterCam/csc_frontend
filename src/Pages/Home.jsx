@@ -118,7 +118,7 @@ export default function Home() {
             <h1 className=" font-bold text-lg md:text-2xl">
               Popular Counties For Scholarship
             </h1>
-            <div className='flex flex-wrap justify-center items-center p-3'>
+            <div className='columns-2 sm:columns-4 p-3 gap-3 space-y-3 lg:gap-12 mt-6'>
               {
                   homepageData?.flags.map((item,i)=>(
                     <Flag item={item} key={i} />
