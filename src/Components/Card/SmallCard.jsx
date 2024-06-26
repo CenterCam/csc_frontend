@@ -21,12 +21,12 @@ export default function SmallCard({item}) {
         }
     },[])
   return (
-    <div className=" h-[480px] transition overflow-hidden">
+    <div className=" h-[380px] sm:h-[520px] transition overflow-hidden">
         <div>
             <img
             src={item.imgLink}
             alt="post-img"
-            className="h-96 w-full object-cover  "
+            className="h-64 sm:h-96 lg:h-[400px] w-full object-cover  "
             />
         </div>
         <div class="p-3"  >

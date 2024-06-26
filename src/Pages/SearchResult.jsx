@@ -43,7 +43,7 @@ export default function SearchResult() {
                         <p className='text-6xl font-bold'>No Search Result !!</p>
                     </div>
                 }
-            <div className=" columns-1 md:columns-2 lg:columns-3 space-y-9 mt-9 w-full">
+            <div className=" columns-2 lg:columns-4 space-y-9 mt-9 w-full">
                 {
                     isLoading ? 
                     <Loading />
