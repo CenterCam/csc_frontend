@@ -141,7 +141,7 @@ export default function UserCreateEditForm() {
                             </FormControl>
                             <SelectContent>
                                 <SelectItem value="user">User</SelectItem>
-                                <SelectItem value="creator"><Creatore></Creatore></SelectItem>
+                                <SelectItem value="creator">Creator</SelectItem>
                                 <SelectItem value="admin">Admin</SelectItem>
                             </SelectContent>
                             </Select>

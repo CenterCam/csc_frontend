@@ -112,9 +112,7 @@ export default function PostTable() {
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.country}</div>
                         <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.status}</div>
                         {
-                            item.user.id !== csc_user.user.id || csc_user.user.role !== "admin" ?
-                            <p>No Permission</p>
-                            :
+                            item.user.id == csc_user.user.id || csc_user.user.role == "admin" ?
                             <div className='flex justify-center w-20 gap-1'>
                                 <Link to={`/dashboard/post/edit/${item.id}`}><Edit /></Link>
                                 <AlertDialog>
@@ -134,6 +132,9 @@ export default function PostTable() {
                                     </AlertDialogContent>
                                     </AlertDialog>
                             </div>
+                            :
+                            <p>No Permission</p>
+                            
                         }
                     </div>
                 ))

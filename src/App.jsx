@@ -86,7 +86,7 @@ export const ProtectedRoutes = () => {
 export const ProtectedAdminRoutes = () => {
   const {state , dispatch} = useContext(Store);
   const {csc_user} = state;
-  return csc_user.user.role == "admin" ? <Outlet /> : <Navigate to={"/"} />
+  return csc_user.user.role !== "user" ? <Outlet /> : <Navigate to={"/"} />
 }
 
 
