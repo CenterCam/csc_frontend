@@ -5,15 +5,15 @@ export default function PostCard({item}) {
   const today = new Date();
   const date = today.toISOString().slice(0,10);
   return (
-    <div className="overflow-hidden max-w-sm w-full md:h-[540px] bg-white border border-gray-200 rounded-lg shadow capitalize"> 
+    <div className="overflow-hidden h-[450px] lg:h-[540px] max-w-sm w-full bg-white  capitalize"> 
     <Link to={`/postDetail/${item.id}`}>
       <img
-        className="rounded-t-lg h-72 w-full object-cover"
+        className=" h-56 sm:h-80 w-full object-cover"
         src={item.imgLink}
         alt=""
       />
     </Link>
-    <div className="p-5">
+    <div className="py-2">
       <div>
         <p className="mb-2 text-lg font-bold tracking-tight hover:underline text-black line-clamp-2">
           {item.title}
