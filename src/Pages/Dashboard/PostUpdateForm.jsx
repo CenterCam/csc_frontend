@@ -220,7 +220,7 @@ export default function PostUpdateForm() {
                                 <SelectContent>
                                     {
                                         countries?.data.map((item,i)=>(
-                                            <SelectItem key={i} value={item.ct_name}>{item.ct_name}</SelectItem>
+                                            <SelectItem className="capitalize" key={i} value={item.ct_name}>{item.ct_name}</SelectItem>
                                         ))
                                     }
                                 </SelectContent>
@@ -266,7 +266,7 @@ export default function PostUpdateForm() {
                                 <SelectContent>
                                     {
                                         programs?.programs.map((item,i)=>(
-                                            <SelectItem key={i} value={item.name}>{item.name}</SelectItem>
+                                            <SelectItem className="capitalize" key={i} value={item.name}>{item.name}</SelectItem>
                                         ))
                                     }
                                 </SelectContent>

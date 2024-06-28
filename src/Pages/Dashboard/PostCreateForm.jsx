@@ -199,7 +199,7 @@ export default function PostCreateForm() {
                             <SelectContent>
                                 {
                                     countries?.data.map((item,i)=>(
-                                        <SelectItem key={i} value={item.ct_name}>{item.ct_name}</SelectItem>
+                                        <SelectItem className="capitalize" key={i} value={item.ct_name}>{item.ct_name}</SelectItem>
                                     ))
                                 }
                             </SelectContent>
@@ -217,7 +217,7 @@ export default function PostCreateForm() {
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                                 <SelectTrigger>
-                                <SelectValue placeholder="Select a verified status to display" />
+                                <SelectValue  placeholder="Select a verified status to display" />
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -239,13 +239,13 @@ export default function PostCreateForm() {
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                                 <SelectTrigger>
-                                <SelectValue placeholder="Select a verified program to display" />
+                                <SelectValue  placeholder="Select a verified program to display" />
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                                 {
                                     programs?.programs.map((item,i)=>(
-                                        <SelectItem key={i} value={item.name}>{item.name}</SelectItem>
+                                        <SelectItem className="capitalize" key={i} value={item.name}>{item.name}</SelectItem>
                                     ))
                                 }
                             </SelectContent>
