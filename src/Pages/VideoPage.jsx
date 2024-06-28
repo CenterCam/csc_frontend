@@ -1,6 +1,8 @@
 import Footer from '@/Components/Frontend-Footer/Footer'
 import Navbar from '@/Components/Frontend-Navbar/Navbar'
 import Loading from '@/Components/ui/Loading'
+import { Button } from '@/Components/ui/button'
+import { Textarea } from '@/Components/ui/textarea'
 import { Store } from '@/Utils/Store'
 import { proxy } from '@/Utils/Utils'
 import { useQuery } from '@tanstack/react-query'
@@ -88,6 +90,45 @@ export default function VideoPage() {
                         controls={true}
                         width='100%'
                         />
+                    <div>
+                        <h1 className='font-bold text-lg'>Comments</h1>
+                        <div className='relative mt-3'>
+                            <Textarea placeholder="Type your message here." />
+                            <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
+                        </div>
+                        <div className='mt-6'>
+                            <div>
+                                <div className='flex gap-3 items-center'>
+                                    <h1 className='font-bold text-sm'>Hong Nnureach</h1>
+                                    <p className='text-xs'>12/02/2025</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure odit, soluta perspiciatis aut dolore, omnis architecto eveniet praesentium voluptate harum alias impedit porro! Nihil impedit ratione corrupti quia consectetur asperiores!</p>
+                                </div>
+                                <div className='mt-3 flex gap-6'>
+                                    <button className="text-xs underline">Reply</button>
+                                    <button className="text-xs underline">Edit</button>
+                                    <button className="text-xs underline">Delete</button>
+                                </div>
+                                <div className='ml-9 mt-3'>
+                                    <div>
+                                        <div className='flex gap-3 items-center'>
+                                            <h1 className='font-bold text-sm'>Admin</h1>
+                                            <p className='text-xs'>12/02/2025</p>
+                                        </div>
+                                        <div>
+                                            <p className='text-xs'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia eaque dolorum soluta facilis ipsum accusantium sequi est iure, aliquid animi delectus veritatis itaque. Obcaecati, nemo distinctio! Architecto necessitatibus possimus dignissimos!</p>
+                                        </div>     
+                                        <div className='mt-3 flex gap-6'>
+                                            <button className="text-xs underline">Edit</button>
+                                            <button className="text-xs underline">Delete</button>
+                                        </div>  
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className=' w-[360px]  md:w-[600px] lg:w-[450px] '>
                     <h1 className='font-bold text-lg'>Content</h1>
