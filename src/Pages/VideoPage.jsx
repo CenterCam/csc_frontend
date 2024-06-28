@@ -8,7 +8,7 @@ import { proxy } from '@/Utils/Utils'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { Camera, Video } from 'lucide-react'
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -21,6 +21,9 @@ export default function VideoPage() {
     const queryParams = new URLSearchParams(location.search);
     const {state , dispatch} = useContext(Store);
     const {csc_user} = state;
+
+    const [showReply , setShowReply] = useState(false);
+
     const {isLoading , isError, data:videos} = useQuery({ 
         queryKey: ['videos',{course_id}], 
         queryFn: async ()=>{
@@ -106,10 +109,18 @@ export default function VideoPage() {
                                     <p className='text-xs'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure odit, soluta perspiciatis aut dolore, omnis architecto eveniet praesentium voluptate harum alias impedit porro! Nihil impedit ratione corrupti quia consectetur asperiores!</p>
                                 </div>
                                 <div className='mt-3 flex gap-6'>
-                                    <button className="text-xs underline">Reply</button>
-                                    <button className="text-xs underline">Edit</button>
+                                    <button onClick={()=>{setShowReply(!showReply)}} className="text-xs underline">Reply</button>
                                     <button className="text-xs underline">Delete</button>
                                 </div>
+                                {
+                                    showReply &&
+                                    <div>
+                                        <div className='relative mt-3'>
+                                            <Textarea placeholder="Type your message here." />
+                                            <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
+                                        </div>
+                                    </div>
+                                }
                                 <div className='ml-9 mt-3'>
                                     <div>
                                         <div className='flex gap-3 items-center'>
@@ -120,7 +131,6 @@ export default function VideoPage() {
                                             <p className='text-xs'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia eaque dolorum soluta facilis ipsum accusantium sequi est iure, aliquid animi delectus veritatis itaque. Obcaecati, nemo distinctio! Architecto necessitatibus possimus dignissimos!</p>
                                         </div>     
                                         <div className='mt-3 flex gap-6'>
-                                            <button className="text-xs underline">Edit</button>
                                             <button className="text-xs underline">Delete</button>
                                         </div>  
                                     </div>
