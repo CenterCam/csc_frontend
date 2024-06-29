@@ -148,6 +148,10 @@ export default function VideoPage() {
                                 <div key={i} className={videoId == item.id ? 'space-y-1 border-b bg-gray-200 p-2 rounded-lg' : 'space-y-1 border-b p-2 rounded-lg' }>
                                     <Link to={`/video/${id}?video=${item.id}`} className='capitalize font-bold'>{item.v_title}</Link>
                                     <p className='capitalize line-clamp-2 text-sm'>{item.v_description}</p>
+                                    <div className='py-3 flex flex-wrap gap-3'>
+                                        <Link className='text-xs bg-black text-white p-2 rounded-sm'  to={'/'}>Resourse</Link>
+                                        <Link className='text-xs bg-black text-white p-2 rounded-sm'  to={'/'}>Resourse</Link>
+                                    </div>
                                     <div className='flex gap-3 items-center'>
                                         <Video />
                                         <p className='text-sm'>{item.v_duration} min</p>
