@@ -7,10 +7,15 @@ import React, { useContext, useState } from 'react'
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
 import VideoUpdateDailog from '../Dailog/VideoUpdateDailog';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import VideoReourseAddDailog from '../Dailog/VideoResourceAddDailog';
 
 export default function VideoForm({videos}) {
 
     const [open,setOpen] = useState(false);
+
+    const [open1,setOpen1] = useState(false);
 
     const navigate = useNavigate();
 
@@ -86,7 +91,11 @@ export default function VideoForm({videos}) {
                           <button disabled={deletePending} onClick={(e)=>deleteVideoMutation(item.id)}>
                               <Trash />
                           </button>
-                          <button>
+                          <button onClick={()=>{
+                              setOpen1(!open1)
+                              navigate(`/dashboard/course/edit/${id}?video=${item.id}`)
+                            }
+                            }>
                             <Plus />
                           </button>
                       </div>
@@ -98,6 +107,7 @@ export default function VideoForm({videos}) {
                     <p>Resource</p>
                     <button>Delete</button>
                   </div>
+                  <VideoReourseAddDailog isOpen={open1} setOpen={setOpen1} />
                 </div>
               </div>
             ))
