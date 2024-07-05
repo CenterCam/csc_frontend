@@ -63,6 +63,7 @@ export default function VideoReourseAddDailog({isOpen,setOpen}) {
       onSuccess : () => {
           queryClient.invalidateQueries(['videos']);
           toast.success("Resource is Created Successfully");
+          setOpen(!isOpen);
           form.reset();
       },
       onError : (err) => {

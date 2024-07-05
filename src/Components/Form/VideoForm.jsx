@@ -21,6 +21,8 @@ export default function VideoForm({videos}) {
 
     const {id} = useParams();
 
+    console.log(videos);
+
     
     const queryParams = new URLSearchParams(location.search);
     const videoId = queryParams.get("video") || null;
@@ -52,9 +54,35 @@ export default function VideoForm({videos}) {
         }
       })
 
-    const video =videos?.filter((item)=>item.id==videoId)[0] || null;
+    const deleteResource = async (resourceId) => {
+      await deleteResouce(resourceId);
+    }
 
-    console.log(video);
+    const { mutateAsync : deleteResouce } = useMutation({
+      mutationFn : async (id)=>{
+        try {
+          const response = await axios.delete(`${proxy}/api/resource/delete/${id}`,
+            {
+              headers : {
+                authorization : `Bearer ${csc_user.token}`
+            }
+          }
+          );  
+          return response.data;
+      } catch (error) {
+          throw error;
+      }
+      },
+      onSuccess : (res) => {
+        queryClient.invalidateQueries(['videos']);
+        toast.success("Resource is deleted successfully");
+      },
+      onError : (err) => {
+        toast.error(err.response.data.message);
+      }
+    })
+
+
 
   return (
     <div className='mt-3'>
@@ -101,12 +129,16 @@ export default function VideoForm({videos}) {
                       </div>
                   </div>
                 </div>
-                <div className='pl-3 mt-3 '>
-                  <div className='flex gap-3 pb-3 border-b'>
-                    <p>{i+1}</p>
-                    <p>Resource</p>
-                    <button>Delete</button>
-                  </div>
+                <div className='pl-3 mt-3'>
+                  {
+                    item.links.map((link,j)=>(
+                    <div className='flex gap-3 pb-3 border-b'>
+                      <p>{i+1}.{j+1}</p>
+                      <p>{link.link}</p>
+                      <button onClick={()=>deleteResource(link.id)}>Delete</button>
+                    </div>
+                    ))
+                  }
                   <VideoReourseAddDailog isOpen={open1} setOpen={setOpen1} />
                 </div>
               </div>
