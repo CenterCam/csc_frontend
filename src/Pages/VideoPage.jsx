@@ -5,7 +5,7 @@ import { Button } from '@/Components/ui/button'
 import { Textarea } from '@/Components/ui/textarea'
 import { Store } from '@/Utils/Store'
 import { proxy } from '@/Utils/Utils'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { Camera, Video } from 'lucide-react'
 import React, { Suspense, useEffect, useState } from 'react'
@@ -19,10 +19,16 @@ export default function VideoPage() {
     const course_id = id;
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const {state , dispatch} = useContext(Store);
+    const {state} = useContext(Store);
     const {csc_user} = state;
 
+    const navigate = useNavigate();
+
     const [showReply , setShowReply] = useState(false);
+
+    const [cmt,setCmt] = useState("");
+
+    const queryClient = useQueryClient();
 
     const {isLoading , isError, data:videos} = useQuery({ 
         queryKey: ['videos',{course_id}], 
@@ -52,6 +58,7 @@ export default function VideoPage() {
     const videoId = queryParams.get("video") ? queryParams.get("video") : ( videos ? videos[0].id : "") ;
 
     const user_id = csc_user.user.id;
+
     const {isLoading:loading3 , isError:error3, data:coursesBelongToUser} = useQuery({ 
         queryKey: ['coursesBelongToUser',{course_id}], 
         queryFn: async ()=>{
@@ -66,14 +73,75 @@ export default function VideoPage() {
     });
     const isPaid = coursesBelongToUser?.find((x)=>x.course_id == course_id);
 
-    const navigate = useNavigate();
     useEffect(()=>{
         if ( coursesBelongToUser?.length == 0 && course?.type=="paid") {
             navigate("/notpurchased");
         }
     },[isPaid,course,coursesBelongToUser]);
 
+    const {  mutateAsync : createCmtMutation } = useMutation({
+        mutationFn : async ()=>{
+            try {
+            const response = await axios.post(`${proxy}/api/comment/create/`,
+                {
+                    content : cmt,
+                    video_id : videoId,
+                }
+                ,
+                {
+                headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                }
+                }
+            )  
+                return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : (res) => {
+            queryClient.invalidateQueries(['vidoes']);
+            setCmt('');
+            toast.success(res.message);
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+    })
+    const {  mutateAsync : deleteCmtMutation } = useMutation({
+        mutationFn : async (cmt_id)=>{
+            try {
+            const response = await axios.delete(`${proxy}/api/comment/delete/${cmt_id}`,
+                {
+                headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                }
+                }
+            )  
+                return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : (res) => {
+            queryClient.invalidateQueries(['vidoes']);
+            toast.success(res.message);
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+    })
 
+    const createCmt = async (e)=>{
+        e.preventDefault();
+        await createCmtMutation();
+    }
+
+    const deleteCmt = async (cmt_id) =>{
+        await deleteCmtMutation(cmt_id)
+    }
+
+    console.log(videos?.filter((item)=>item.id==videoId));
     if ( isLoading || loading2 || loading3 ) {
         return <Loading />
     }
@@ -96,47 +164,52 @@ export default function VideoPage() {
                     <div>
                         <h1 className='font-bold text-lg'>Comments</h1>
                         <div className='relative mt-3'>
-                            <Textarea placeholder="Type your message here." />
-                            <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
+                            <Textarea value={cmt} onChange={(e)=>setCmt(e.target.value)} placeholder="Type your message here." />
+                            <Button onClick={createCmt} className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
                         </div>
-                        <div className='mt-6'>
-                            <div>
-                                <div className='flex gap-3 items-center'>
-                                    <h1 className='font-bold text-sm'>Hong Nnureach</h1>
-                                    <p className='text-xs'>12/02/2025</p>
-                                </div>
-                                <div>
-                                    <p className='text-xs'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure odit, soluta perspiciatis aut dolore, omnis architecto eveniet praesentium voluptate harum alias impedit porro! Nihil impedit ratione corrupti quia consectetur asperiores!</p>
-                                </div>
-                                <div className='mt-3 flex gap-6'>
-                                    <button onClick={()=>{setShowReply(!showReply)}} className="text-xs underline">Reply</button>
-                                    <button className="text-xs underline">Delete</button>
-                                </div>
-                                {
-                                    showReply &&
-                                    <div>
-                                        <div className='relative mt-3'>
-                                            <Textarea placeholder="Type your message here." />
-                                            <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
-                                        </div>
+                        <div className='mt-6 flex flex-col gap-3'>
+                            {
+                                videos?.filter((item)=>item.id==videoId)[0]?.comments?.map((item,i)=>(
+                                <div key={i}>
+                                    <div className='flex gap-3 items-center'>
+                                        <h1 className='font-bold text-sm'>Hong Nnureach</h1>
+                                        <p className='text-xs'>{item.created_at.slice(0,10)}</p>
                                     </div>
-                                }
-                                <div className='ml-9 mt-3'>
                                     <div>
-                                        <div className='flex gap-3 items-center'>
-                                            <h1 className='font-bold text-sm'>Admin</h1>
-                                            <p className='text-xs'>12/02/2025</p>
-                                        </div>
+                                        <p className='text-xs'>{item.content}</p>
+                                    </div>
+                                    <div className='mt-3 flex gap-6'>
+                                        <button onClick={()=>{setShowReply(!showReply)}} className="text-xs underline">Reply</button>
+                                        <button onClick={()=>deleteCmt(item.id)} className="text-xs underline">Delete</button>
+                                    </div>
+                                    {
+                                        showReply &&
                                         <div>
-                                            <p className='text-xs'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia eaque dolorum soluta facilis ipsum accusantium sequi est iure, aliquid animi delectus veritatis itaque. Obcaecati, nemo distinctio! Architecto necessitatibus possimus dignissimos!</p>
-                                        </div>     
-                                        <div className='mt-3 flex gap-6'>
-                                            <button className="text-xs underline">Delete</button>
-                                        </div>  
+                                            <div className='relative mt-3'>
+                                                <Textarea placeholder="Type your message here." />
+                                                <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div className='ml-9 mt-3'>
+                                        <div>
+                                            <div className='flex gap-3 items-center'>
+                                                <h1 className='font-bold text-sm'>Admin</h1>
+                                                <p className='text-xs'>12/02/2025</p>
+                                            </div>
+                                            <div>
+                                                <p className='text-xs'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia eaque dolorum soluta facilis ipsum accusantium sequi est iure, aliquid animi delectus veritatis itaque. Obcaecati, nemo distinctio! Architecto necessitatibus possimus dignissimos!</p>
+                                            </div>     
+                                            <div className='mt-3 flex gap-6'>
+                                                <button className="text-xs underline">Delete</button>
+                                            </div>  
+                                        </div>
+                                        
                                     </div>
-                                    
                                 </div>
-                            </div>
+
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
