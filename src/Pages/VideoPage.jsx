@@ -169,10 +169,13 @@ export default function VideoPage() {
                         </div>
                         <div className='mt-6 flex flex-col gap-3'>
                             {
-                                videos?.filter((item)=>item.id==videoId)[0]?.comments?.map((item,i)=>(
+                                videos?.filter((item)=>item.id==videoId)[0]?.comments
+                                .sort((a,b)=>b.id - a.id)
+                                .slice(0,6)
+                                .map((item,i)=>(
                                 <div key={i}>
                                     <div className='flex gap-3 items-center'>
-                                        <h1 className='font-bold text-sm'>Hong Nnureach</h1>
+                                        <h1 className='font-bold text-sm capitalize'>{item.user.name}</h1>
                                         <p className='text-xs'>{item.created_at.slice(0,10)}</p>
                                     </div>
                                     <div>
@@ -180,7 +183,10 @@ export default function VideoPage() {
                                     </div>
                                     <div className='mt-3 flex gap-6'>
                                         <button onClick={()=>{setShowReply(!showReply)}} className="text-xs underline">Reply</button>
-                                        <button onClick={()=>deleteCmt(item.id)} className="text-xs underline">Delete</button>
+                                        {
+                                            csc_user?.user.id == item.user.id &&
+                                            <button onClick={()=>deleteCmt(item.id)} className="text-xs underline">Delete</button>
+                                        }
                                     </div>
                                     {
                                         showReply &&
