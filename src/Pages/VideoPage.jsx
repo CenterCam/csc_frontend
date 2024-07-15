@@ -28,6 +28,8 @@ export default function VideoPage() {
 
     const [cmt,setCmt] = useState("");
 
+    const [reply,setReply] = useState("");
+
     const queryClient = useQueryClient();
 
     const {isLoading , isError, data:videos} = useQuery({ 
@@ -56,6 +58,8 @@ export default function VideoPage() {
 
     });
     const videoId = queryParams.get("video") ? queryParams.get("video") : ( videos ? videos[0].id : "") ;
+
+    const cmt_id = queryParams.get("cmt_id") ;
 
     const user_id = csc_user.user.id;
 
@@ -131,6 +135,35 @@ export default function VideoPage() {
             toast.error(err.response.data.message);
         }
     })
+    const {  mutateAsync : createReplyMutation } = useMutation({
+        mutationFn : async ()=>{
+            try {
+            const response = await axios.post(`${proxy}/api/reply/create/`,
+                {
+                    content : reply,
+                    cmt_id : cmt_id,
+                }
+                ,
+                {
+                headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                }
+                }
+            )  
+                return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : (res) => {
+            queryClient.invalidateQueries(['vidoes']);
+            setCmt('');
+            toast.success(res.message);
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+    })
 
     const createCmt = async (e)=>{
         e.preventDefault();
@@ -139,6 +172,10 @@ export default function VideoPage() {
 
     const deleteCmt = async (cmt_id) =>{
         await deleteCmtMutation(cmt_id)
+    }
+    
+    const replyCmt = async () =>{
+        await createReplyMutation();
     }
 
     console.log(videos?.filter((item)=>item.id==videoId));
@@ -172,44 +209,52 @@ export default function VideoPage() {
                                 videos?.filter((item)=>item.id==videoId)[0]?.comments
                                 .sort((a,b)=>b.id - a.id)
                                 .slice(0,6)
-                                .map((item,i)=>(
+                                .map((a,i)=>(
                                 <div key={i}>
                                     <div className='flex gap-3 items-center'>
-                                        <h1 className='font-bold text-sm capitalize'>{item.user.name}</h1>
-                                        <p className='text-xs'>{item.created_at.slice(0,10)}</p>
+                                        <h1 className='font-bold text-sm capitalize'>{a.user.name}</h1>
+                                        <p className='text-xs'>{a.created_at.slice(0,10)}</p>
                                     </div>
                                     <div>
-                                        <p className='text-xs'>{item.content}</p>
+                                        <p className='text-xs capitalize'>{a.content}</p>
                                     </div>
                                     <div className='mt-3 flex gap-6'>
-                                        <button onClick={()=>{setShowReply(!showReply)}} className="text-xs underline">Reply</button>
+                                        <button onClick={()=>{
+                                            setShowReply(!showReply);
+                                            navigate(`/video/${course_id}?video=${videoId}&cmt_id=${a.id}`)
+                                        }} className="text-xs underline">Reply</button>
                                         {
-                                            csc_user?.user.id == item.user.id &&
-                                            <button onClick={()=>deleteCmt(item.id)} className="text-xs underline">Delete</button>
+                                            csc_user?.user.id == a.user.id &&
+                                            <button onClick={()=>deleteCmt(a.id)} className="text-xs underline">Delete</button>
                                         }
                                     </div>
                                     {
-                                        showReply &&
+                                        showReply && cmt_id == a.id &&
                                         <div>
                                             <div className='relative mt-3'>
-                                                <Textarea placeholder="Type your message here." />
-                                                <Button className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
+                                                <Textarea onChange={(e)=>setReply(e.target.value)} value={reply} placeholder="Type your message here." />
+                                                <Button onClick={()=>replyCmt(a.id)} className="absolute right-3 bottom-3 w-12 h-12 rounded-full">Go</Button>
                                             </div>
                                         </div>
                                     }
                                     <div className='ml-9 mt-3'>
-                                        <div>
-                                            <div className='flex gap-3 items-center'>
-                                                <h1 className='font-bold text-sm'>Admin</h1>
-                                                <p className='text-xs'>12/02/2025</p>
+                                        {
+                                          a.replies.map((b,j)=>(
+                                            <div key={j}>
+                                                <div className='flex gap-3 items-center'>
+                                                    <h1 className='font-bold text-sm capitalize'>{b.user.name}</h1>
+                                                    <p className='text-xs'>{b.created_at.slice(0,10)}</p>
+                                                </div>
+                                                <div>
+                                                    <p className='text-xs capitalize'>{b.content}</p>
+                                                </div>     
+                                                <div className='mt-3 flex gap-6'>
+                                                    <button className="text-xs underline">Delete</button>
+                                                </div>  
                                             </div>
-                                            <div>
-                                                <p className='text-xs'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia eaque dolorum soluta facilis ipsum accusantium sequi est iure, aliquid animi delectus veritatis itaque. Obcaecati, nemo distinctio! Architecto necessitatibus possimus dignissimos!</p>
-                                            </div>     
-                                            <div className='mt-3 flex gap-6'>
-                                                <button className="text-xs underline">Delete</button>
-                                            </div>  
-                                        </div>
+
+                                          ))
+                                        }
                                         
                                     </div>
                                 </div>
