@@ -106,6 +106,7 @@ export default function VideoPage() {
         onSuccess : (res) => {
             queryClient.invalidateQueries(['vidoes']);
             setCmt('');
+            showReply(!showReply);
             toast.success(res.message);
         },
         onError : (err) => {
@@ -157,7 +158,31 @@ export default function VideoPage() {
         },
         onSuccess : (res) => {
             queryClient.invalidateQueries(['vidoes']);
-            setCmt('');
+            setReply('');
+            setShowReply(!showReply);
+            toast.success(res.message);
+        },
+        onError : (err) => {
+            toast.error(err.response.data.message);
+        }
+    })
+    const {  mutateAsync : deleteReplyMutation } = useMutation({
+        mutationFn : async (reply_id)=>{
+            try {
+            const response = await axios.delete(`${proxy}/api/reply/delete/${reply_id}`,
+                {
+                headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                }
+                }
+            )  
+                return response.data;
+            } catch (error) {
+            throw error;
+            }
+        },
+        onSuccess : (res) => {
+            queryClient.invalidateQueries(['vidoes']);
             toast.success(res.message);
         },
         onError : (err) => {
@@ -178,7 +203,10 @@ export default function VideoPage() {
         await createReplyMutation();
     }
 
-    console.log(videos?.filter((item)=>item.id==videoId));
+    const deleteReply = async (reply_id)=>{
+        await deleteReplyMutation(reply_id)
+    }
+
     if ( isLoading || loading2 || loading3 ) {
         return <Loading />
     }
@@ -249,7 +277,7 @@ export default function VideoPage() {
                                                     <p className='text-xs capitalize'>{b.content}</p>
                                                 </div>     
                                                 <div className='mt-3 flex gap-6'>
-                                                    <button className="text-xs underline">Delete</button>
+                                                    <button onClick={()=>deleteReply(b.id)} className="text-xs underline">Delete</button>
                                                 </div>  
                                             </div>
 
