@@ -4,17 +4,46 @@
         import { Button } from '../ui/button';
         import { Store } from '@/Utils/Store';
         import { Book, LogOut } from 'lucide-react';
+import axios from 'axios';
+import { proxy } from '@/Utils/Utils';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
         export default function Navbar({page}) {
         const navigate = useNavigate();
         const {state , dispatch} = useContext(Store);
         const {csc_user} = state;
         const [menu, setMenu] = useState(false);
-        const logout = (e)=>{
+        const logout = async (e)=>{
             e.preventDefault();
-            dispatch({type:"USER_SIGNOUT"})
-            navigate("/");
+            await singoutMutation();
         }
+        const { isPending , mutateAsync : singoutMutation } = useMutation({
+            mutationFn : async (state)=>{
+              try {
+                const response = await axios.post(`${proxy}/api/logout`,
+                {},
+                {
+                    headers : {
+                    authorization : `Bearer ${csc_user.token}`
+                    }
+                }    
+                ) ;
+                return response.data;
+              } catch (error) {
+                throw error;
+              }
+            },
+            onSuccess : (response) => {
+              dispatch({type:"USER_SIGNOUT"})
+              navigate("/");
+              toast.success("Sign out successfully");
+            },
+            onError : (err) => {
+              console.log(err);
+              toast.error(err.response.data.message);
+            }
+          })
         return (
             <nav className="sticky bg-white w-full z-50 top-0 start-0 border-b shadow-lg ">
                 <div className="flex flex-wrap items-center justify-between mx-auto p-3">
