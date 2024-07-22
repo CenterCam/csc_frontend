@@ -11,7 +11,7 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'USER_SIGNIN' : 
-      Cookies.set('csc_user', JSON.stringify(action.payload) , { expires: 1 });
+      Cookies.set('csc_user', JSON.stringify(action.payload));
       return {...state , csc_user:action.payload};
     case 'USER_SIGNOUT' : 
       Cookies.remove('csc_user');
