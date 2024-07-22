@@ -252,9 +252,10 @@ export default function VideoPage() {
                                             navigate(`/video/${course_id}?video=${videoId}&cmt_id=${a.id}`)
                                         }} className="text-xs underline">Reply</button>
                                         {
-                                            csc_user?.user.id == a.user.id &&
+                                            (csc_user?.user.id === a.user.id || csc_user?.user.role ==="admin") &&
                                             <button onClick={()=>deleteCmt(a.id)} className="text-xs underline">Delete</button>
                                         }
+                    
                                     </div>
                                     {
                                         showReply && cmt_id == a.id &&
