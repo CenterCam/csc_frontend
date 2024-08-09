@@ -64,7 +64,38 @@ export default function UserTable() {
           toast.error(err.response.data.message);
         }
       });
-      console.log(data?.data);
+    
+    const updateIsLogged = async (user_id)=>{
+        const isConfirmed = window.confirm('Are you sure you want to proceed?');
+            if (isConfirmed) {
+            alert('You clicked OK!');
+            await updateIsLoggedMutation(user_id)
+            } else {
+            alert('You clicked Cancel!');
+            // You can add your logic here for what happens when "Cancel" is clicked
+            }
+        
+    }  
+    const { isPending:isLoggedPeding , mutateAsync : updateIsLoggedMutation } = useMutation({
+        mutationFn : async (user_id)=>{
+          try {
+            const response = await axios.post(`${proxy}/api/isLoggedUpdate/${user_id}`,
+            {},
+            ) ;
+            return response.data;
+          } catch (error) {
+            throw error;
+          }
+        },
+        onSuccess : (response) => {
+          toast.success(response.message);
+          queryClient.invalidateQueries(['users']);
+        },
+        onError : (err) => {
+          console.log(err);
+          toast.error(err.response.data.message);
+        }
+      })
   return (
     <>
     <div className='flex justify-between mt-6 flex-wrap gap-3'>
@@ -86,6 +117,7 @@ export default function UserTable() {
             <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>ID</div>
             <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>Name</div>
             <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>Email</div>
+            <div className='w-16 text-nowrap overflow-hidden text-ellipsis text-center'>Active</div>
             <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>Role</div>
             {/* <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>Status</div> */}
             <div className='flex justify-center w-20'>Action</div>
@@ -105,6 +137,12 @@ export default function UserTable() {
                         <div className='w-9 text-nowrap overflow-hidden text-ellipsis'>{i+1}</div>
                         <div className='w-36 '>{item.name}</div>
                         <div className='w-36 md:w-48 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.email}</div>
+                        <div className='w-16 text-center flex justify-center text-nowrap overflow-hidden text-ellipsis'>
+                            {
+                                item.isLogged == 0 ? <div onClick={()=>updateIsLogged(item.id)} className='w-6 h-6 rounded-full bg-red-600'></div> 
+                                : <div onClick={()=>updateIsLogged(item.id)} className='w-6 h-6 rounded-full bg-green-600'></div> 
+                            }
+                        </div>
                         <div className='w-36 text-nowrap overflow-hidden text-ellipsis'>{item.role}</div>
                         {/* <div className='w-20 text-nowrap overflow-hidden text-ellipsis hidden lg:block'>{item.status}</div> */}
                         <div className='flex justify-center w-20 gap-1'>
